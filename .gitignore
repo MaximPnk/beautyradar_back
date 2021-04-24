@@ -31,3 +31,4 @@ build/
 
 ### VS Code ###
 .vscode/
+/front-gateway/src/main/resources/front-gateway-secret.properties
