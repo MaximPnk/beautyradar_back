@@ -7,16 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class MasterDto {
 
     private Long id;
-    private String upn;
-    private String login;
-    private MasterDto master;
-    private String name;
-    private String phone;
-    private String email;
-    private byte[] img;
+    private String address;
     private Double rating;
 
 }

@@ -1,12 +1,19 @@
 package ru.beautyradar.frontgateway.service.inter;
 
-import org.springframework.scheduling.annotation.Async;
 import ru.beautyradar.frontgateway.dto.UserDto;
+import ru.beautyradar.frontgateway.dto.wrap.Resp;
 
 public interface UserService {
 
-    UserDto getUserByUpn(String upn);
+    Resp getUsers();
 
-    @Async
-    void saveUser(UserDto userDto);
+    Resp getUserByUpn(String upn);
+
+    Resp existsUserByUpn(String upn);
+
+    Resp saveUser(UserDto userDto);
+
+    Resp updateUser(UserDto userDto);
+
+    Resp deleteUserByUpn(String upn);
 }

@@ -10,38 +10,22 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user", schema = "beauty")
+@Table(name = "master", schema = "beauty")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity {
+public class MasterEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "master_id")
     private Long id;
 
-    @Column(name = "upn")
-    private String upn;
+    /*@OneToOne(mappedBy = "master")
+    private UserEntity user;*/
 
-    @Column(name = "login")
-    private String login;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "master_id")
-    MasterEntity master;
-
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "phone")
-    private String phone;
-
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "img")
-    private byte[] img;
+    @Column(name = "address")
+    private String address;
 
     @Column(name = "rating")
     private Double rating;
@@ -53,5 +37,4 @@ public class UserEntity {
     @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
 }

@@ -1,29 +1,44 @@
 package ru.beautyradar.frontgateway.map;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.beautyradar.frontgateway.dto.UserDto;
 import ru.beautyradar.frontgateway.entity.UserEntity;
 
 @Component
+@RequiredArgsConstructor
 public class UserMapper {
 
-    public UserDto map(UserEntity entity) {
+    private final MasterMapper masterMapper = new MasterMapper();
+
+    public UserDto mapEntityToDto(UserEntity entity) {
         UserDto dto = new UserDto();
         dto.setId(entity.getId());
         dto.setUpn(entity.getUpn());
-        dto.setName(entity.getName());
         dto.setLogin(entity.getLogin());
+        dto.setMaster(masterMapper.mapEntityToDto(entity.getMaster()));
+        dto.setName(entity.getName());
+        dto.setEmail(entity.getEmail());
+        dto.setPhone(entity.getPhone());
         dto.setImg(entity.getImg());
+        dto.setRating(entity.getRating());
         return dto;
     }
 
-    public UserEntity map(UserDto dto) {
+    public UserEntity mapDtoToEntity(UserDto dto) {
         UserEntity entity = new UserEntity();
         entity.setId(dto.getId());
         entity.setUpn(dto.getUpn());
-        entity.setName(dto.getName());
-        entity.setLogin(dto.getLogin());
-        entity.setImg(dto.getImg());
+        mapDtoToEntity(dto, entity);
         return entity;
+    }
+
+    public void mapDtoToEntity(UserDto dto, UserEntity entity) {
+        entity.setLogin(dto.getLogin());
+        entity.setName(dto.getName());
+        entity.setEmail(dto.getEmail());
+        entity.setPhone(dto.getPhone());
+        entity.setImg(dto.getImg());
+        entity.setRating(dto.getRating());
     }
 }
