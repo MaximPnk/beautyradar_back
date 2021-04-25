@@ -1,0 +1,6 @@
+version: '2'
+services:
+  discovery-server:
+    build: front-gateway/.
+    ports:
+      - "8189:8189"
