@@ -3,4 +3,4 @@ services:
   discovery-server:
     build: front-gateway/.
     ports:
-      - "8189:8189"
+      - "9999:9999"
