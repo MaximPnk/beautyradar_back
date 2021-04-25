@@ -39,7 +39,7 @@ public class UserController {
         return ResponseEntity.ok(userService.existsUserByUpn(upn));
     }
 
-    @ApiOperation(value = "Create user", httpMethod = "POST", notes = "Создание пользователя", response = UserDto.class)
+    @ApiOperation(value = "Create new user", httpMethod = "POST", notes = "Создание пользователя", response = UserDto.class)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
     @PostMapping("/")
     public ResponseEntity<?> saveUser(@RequestBody UserDto userDto) {
@@ -53,7 +53,7 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(userDto));
     }
 
-    @ApiOperation(value = "Delete user", httpMethod = "DELETE", notes = "Удаление пользователя")
+    @ApiOperation(value = "Delete user by UID", httpMethod = "DELETE", notes = "Удаление пользователя")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
     @DeleteMapping("/{upn}")
     public ResponseEntity<?> deleteUserByUpn(@PathVariable String upn) {
