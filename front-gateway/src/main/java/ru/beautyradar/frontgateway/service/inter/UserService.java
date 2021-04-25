@@ -5,15 +5,15 @@ import ru.beautyradar.frontgateway.dto.wrap.Resp;
 
 public interface UserService {
 
-    Resp getUsers();
+    Resp<?> getUsers();
 
-    Resp getUserByUpn(String upn);
+    Resp<?> getUserByUpn(String upn);
 
-    Resp existsUserByUpn(String upn);
+    Resp<?> existsUserByUpn(String upn);
 
-    Resp saveUser(UserDto userDto);
+    Resp<?> saveUser(UserDto userDto);
 
-    Resp updateUser(UserDto userDto);
+    Resp<?> updateUser(UserDto userDto);
 
-    Resp deleteUserByUpn(String upn);
+    Resp<?> deleteUserByUpn(String upn);
 }

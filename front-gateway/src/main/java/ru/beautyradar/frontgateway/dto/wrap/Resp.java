@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Resp {
+public class Resp<T> {
     int code;
     String message;
-    Object body;
+    T body;
 }
