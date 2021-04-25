@@ -1,7 +1,7 @@
 server:
   servlet:
     context-path: /frontgateway
-  port: 8189
+  port: 9999
 
 spring:
   datasource:
