@@ -32,3 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 /front-gateway/src/main/resources/front-gateway-secret.properties
+/push-service/src/main/resources/firebase-service-account.json
