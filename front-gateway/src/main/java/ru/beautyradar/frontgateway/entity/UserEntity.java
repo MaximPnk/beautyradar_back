@@ -42,9 +42,6 @@ public class UserEntity {
     @Column(name = "img")
     private byte[] img;
 
-    @Column(name = "rating")
-    private Double rating;
-
     @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;

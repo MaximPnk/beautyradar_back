@@ -20,7 +20,6 @@ public class UserMapper {
         dto.setEmail(entity.getEmail());
         dto.setPhone(entity.getPhone());
         dto.setImg(entity.getImg());
-        dto.setRating(entity.getRating());
         return dto;
     }
 
@@ -39,6 +38,5 @@ public class UserMapper {
         entity.setEmail(dto.getEmail());
         entity.setPhone(dto.getPhone());
         entity.setImg(dto.getImg());
-        entity.setRating(dto.getRating());
     }
 }

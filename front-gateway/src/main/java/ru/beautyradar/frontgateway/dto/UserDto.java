@@ -17,6 +17,5 @@ public class UserDto {
     private String phone;
     private String email;
     private byte[] img;
-    private Double rating;
 
 }
