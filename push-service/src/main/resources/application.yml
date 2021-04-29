@@ -1,0 +1,4 @@
+server:
+  port: 9991
+  servlet:
+    context-path: /pushservice
