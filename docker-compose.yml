@@ -1,6 +1,10 @@
 version: '2'
 services:
-  discovery-server:
+  front-gateway:
     build: front-gateway/.
     ports:
       - "9999:9999"
+  push-service:
+    build: push-service/.
+    ports:
+      - "9991:9991"
