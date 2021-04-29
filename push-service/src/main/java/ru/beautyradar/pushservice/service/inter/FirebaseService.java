@@ -5,5 +5,5 @@ import ru.beautyradar.pushservice.model.PrivateMsg;
 
 public interface FirebaseService {
 
-    Resp<?> send(PrivateMsg privateMsg);
+    Resp<?> send(PrivateMsg privateMsg, String token);
 }

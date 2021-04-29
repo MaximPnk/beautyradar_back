@@ -17,7 +17,7 @@ public class FirebaseServiceImpl implements FirebaseService {
     private final FirebaseMessaging firebaseMessaging;
 
     @Override
-    public Resp<?> send(PrivateMsg privateMsg) {
+    public Resp<?> send(PrivateMsg privateMsg, String token) {
         Notification notification = Notification
                 .builder()
                 .setTitle(privateMsg.getTitle())
@@ -27,7 +27,7 @@ public class FirebaseServiceImpl implements FirebaseService {
 
         Message message = Message
                 .builder()
-                .setToken(privateMsg.getToken())
+                .setToken(token)
                 .setNotification(notification)
 //                .putAllData()
                 .build();

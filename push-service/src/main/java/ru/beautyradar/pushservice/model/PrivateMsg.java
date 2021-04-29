@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PrivateMsg {
-    private String token;
+    private String upn;
     private String title;
     private String msg;
 }
