@@ -21,8 +21,9 @@ public class MasterEntity {
     @Column(name = "master_id")
     private Long id;
 
-    /*@OneToOne(mappedBy = "master")
-    private UserEntity user;*/
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
     @Column(name = "address")
     private String address;

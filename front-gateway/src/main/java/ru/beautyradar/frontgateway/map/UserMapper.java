@@ -16,7 +16,6 @@ public class UserMapper {
         dto.setId(entity.getId());
         dto.setUpn(entity.getUpn());
         dto.setLogin(entity.getLogin());
-        dto.setMaster(masterMapper.mapEntityToDto(entity.getMaster()));
         dto.setName(entity.getName());
         dto.setEmail(entity.getEmail());
         dto.setPhone(entity.getPhone());

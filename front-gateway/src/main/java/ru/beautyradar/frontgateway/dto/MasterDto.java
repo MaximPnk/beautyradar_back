@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class MasterDto {
 
     private Long id;
+    private UserDto user;
     private String address;
     private Double rating;
 

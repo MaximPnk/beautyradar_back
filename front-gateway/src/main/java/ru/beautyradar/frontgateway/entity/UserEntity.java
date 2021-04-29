@@ -30,10 +30,6 @@ public class UserEntity {
     @Column(name = "login")
     private String login;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "master_id")
-    MasterEntity master;
-
     @Column(name = "name")
     private String name;
 

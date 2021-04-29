@@ -13,7 +13,6 @@ public class UserDto {
     private String upn;
     private String token;
     private String login;
-    private MasterDto master;
     private String name;
     private String phone;
     private String email;
