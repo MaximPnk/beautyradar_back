@@ -11,6 +11,7 @@ public class UserDto {
 
     private Long id;
     private String upn;
+    private String token;
     private String login;
     private MasterDto master;
     private String name;

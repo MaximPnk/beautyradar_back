@@ -29,6 +29,7 @@ public class UserMapper {
         UserEntity entity = new UserEntity();
         entity.setId(dto.getId());
         entity.setUpn(dto.getUpn());
+        entity.setToken(dto.getToken());
         mapDtoToEntity(dto, entity);
         return entity;
     }

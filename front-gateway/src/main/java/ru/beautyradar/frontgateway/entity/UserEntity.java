@@ -24,6 +24,9 @@ public class UserEntity {
     @Column(name = "upn")
     private String upn;
 
+    @Column(name = "token")
+    private String token;
+
     @Column(name = "login")
     private String login;
 
