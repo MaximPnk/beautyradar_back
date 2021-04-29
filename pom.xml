@@ -18,6 +18,7 @@
 
     <modules>
         <module>front-gateway</module>
+        <module>push-service</module>
     </modules>
 
     <properties>
