@@ -24,7 +24,7 @@ public class GalleryEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     @Column(name = "master_id")
-    private MasterEntity masterEntity;
+    private MasterEntity master;
 
     @Column(name = "img")
     private byte[] image;

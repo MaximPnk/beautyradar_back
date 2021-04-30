@@ -3,11 +3,8 @@ package ru.beautyradar.frontgateway.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "service_description", schema = "beauty")
@@ -22,11 +19,11 @@ public class ServiceDescriptionEntity {
 
     @OneToOne (cascade = CascadeType.ALL)
     @Column(name = "master_id")
-    private MasterEntity masterEntity;
+    private MasterEntity master;
 
     @OneToOne (cascade = CascadeType.ALL)
     @Column(name = "service_category_id")
-    private ServiceCategory serviceCategory;
+    private ServiceCategoryEntity serviceCategory;
 
     @Column(name = "duration")
     private Integer duration; //todo - переделать на класс Duration (интервал времени)

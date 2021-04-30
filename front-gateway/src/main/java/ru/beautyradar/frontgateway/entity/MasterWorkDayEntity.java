@@ -21,7 +21,7 @@ public class MasterWorkDayEntity {
 
     @OneToOne (cascade = CascadeType.ALL)
     @Column(name = "master_id")
-    private MasterEntity masterEntity;
+    private MasterEntity master;
 
     @Column(name = "date")
     private LocalDateTime date;

@@ -28,5 +28,5 @@ public class MasterCategoryEntity {
     @JoinTable(name = "master_categories",
             joinColumns = @JoinColumn(name = "master_category_id"),
             inverseJoinColumns = @JoinColumn(name = "master_id"))
-    private List<MasterEntity> masterEntity; //todo - нужен ли в БД crated_at?
+    private List<MasterEntity> master; //todo - нужен ли в БД crated_at?
 }

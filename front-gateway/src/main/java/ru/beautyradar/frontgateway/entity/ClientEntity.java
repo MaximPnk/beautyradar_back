@@ -24,7 +24,7 @@ public class ClientEntity {
 
     @OneToOne
     @Column(name = "user_id")
-    private UserEntity userEntity;
+    private UserEntity user;
 
     @Column(name = "rating")
     private Double rating;
@@ -41,6 +41,6 @@ public class ClientEntity {
     @JoinTable(name = "favorite",
             joinColumns = @JoinColumn(name = "client_id"),
             inverseJoinColumns = @JoinColumn(name = "master_id"))
-    private List<MasterEntity> favoriteMaster;
+    private List<MasterEntity> favoriteMasters;
 
 }

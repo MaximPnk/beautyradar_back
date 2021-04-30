@@ -28,7 +28,7 @@ public class JobEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     @Column(name = "client_id")
-    private ClientEntity clientEntity;
+    private ClientEntity client;
 
     @OneToOne (cascade = CascadeType.ALL)
     @Column(name = "service_description_id")
