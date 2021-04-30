@@ -11,26 +11,30 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "master", schema = "beauty")
+@Table(name = "master_review", schema = "beauty")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MasterEntity {
+public class MasterReviewEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "master_id")
+    @Column(name = "master_review_id")
     private Long id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
+    @JoinColumn(name = "master_id")
+    private MasterEntity master;
 
-    @Column(name = "address")
-    private String address;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "client_id")
+    private ClientEntity client;
 
     @Column(name = "rating")
     private Double rating;
+
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "created_at")
     @CreationTimestamp
@@ -39,17 +43,5 @@ public class MasterEntity {
     @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-    @ManyToMany
-    @JoinTable(name = "favorite",
-            joinColumns = @JoinColumn(name = "master_id"),
-            inverseJoinColumns = @JoinColumn(name = "client_id"))
-    private List<ClientEntity> favoriteClient;
-
-    @ManyToMany
-    @JoinTable(name = "master_categories",
-            joinColumns = @JoinColumn(name = "master_id"),
-            inverseJoinColumns = @JoinColumn(name = "master_category_id"))
-    private List<MasterCategoryEntity> masterCategory;
 
 }

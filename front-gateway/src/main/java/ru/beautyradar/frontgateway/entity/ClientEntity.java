@@ -11,23 +11,20 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "master", schema = "beauty")
+@Table(name = "client", schema = "beauty")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MasterEntity {
+public class ClientEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "master_id")
+    @Column(name = "client_id")
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
-
-    @Column(name = "address")
-    private String address;
+    @OneToOne
+    @Column(name = "user_id")
+    private UserEntity userEntity;
 
     @Column(name = "rating")
     private Double rating;
@@ -42,14 +39,8 @@ public class MasterEntity {
 
     @ManyToMany
     @JoinTable(name = "favorite",
-            joinColumns = @JoinColumn(name = "master_id"),
-            inverseJoinColumns = @JoinColumn(name = "client_id"))
-    private List<ClientEntity> favoriteClient;
-
-    @ManyToMany
-    @JoinTable(name = "master_categories",
-            joinColumns = @JoinColumn(name = "master_id"),
-            inverseJoinColumns = @JoinColumn(name = "master_category_id"))
-    private List<MasterCategoryEntity> masterCategory;
+            joinColumns = @JoinColumn(name = "client_id"),
+            inverseJoinColumns = @JoinColumn(name = "master_id"))
+    private List<MasterEntity> favoriteMaster;
 
 }
