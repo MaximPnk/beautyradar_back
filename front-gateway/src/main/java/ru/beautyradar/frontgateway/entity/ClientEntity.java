@@ -23,7 +23,7 @@ public class ClientEntity {
     private Long id;
 
     @OneToOne
-    @Column(name = "user_id")
+    @JoinColumn(name = "user_id")
     private UserEntity user;
 
     @Column(name = "rating")

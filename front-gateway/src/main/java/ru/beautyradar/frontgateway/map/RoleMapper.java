@@ -11,7 +11,6 @@ import ru.beautyradar.frontgateway.entity.UserEntity;
 @RequiredArgsConstructor
 public class RoleMapper {
 
-    private final RoleMapper roleMapper = new RoleMapper();
 
     public RoleDto mapEntityToDto(RoleEntity entity) {
         if (entity == null) {
