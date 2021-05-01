@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public interface RoleService {
 
-    List<RoleEntity> getRolesByUserDto(UserDto userDto);
-    List<RoleEntity> getRolesByUser(UserEntity user);
+    List<RoleEntity> findRoles(Long id);
+
 
 
 }
