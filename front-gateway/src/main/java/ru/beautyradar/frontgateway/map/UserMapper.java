@@ -9,8 +9,6 @@ import ru.beautyradar.frontgateway.entity.UserEntity;
 @RequiredArgsConstructor
 public class UserMapper {
 
-    private final MasterMapper masterMapper = new MasterMapper();
-
     public UserDto mapEntityToDto(UserEntity entity) {
         UserDto dto = new UserDto();
         dto.setId(entity.getId());
@@ -19,7 +17,7 @@ public class UserMapper {
         dto.setName(entity.getName());
         dto.setEmail(entity.getEmail());
         dto.setPhone(entity.getPhone());
-        dto.setImg(entity.getImg());
+        dto.setImg(entity.getAvatar());
         return dto;
     }
 
@@ -37,6 +35,6 @@ public class UserMapper {
         entity.setName(dto.getName());
         entity.setEmail(dto.getEmail());
         entity.setPhone(dto.getPhone());
-        entity.setImg(dto.getImg());
+        entity.setAvatar(dto.getImg());
     }
 }

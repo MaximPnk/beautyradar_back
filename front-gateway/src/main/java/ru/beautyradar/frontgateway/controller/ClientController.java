@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.beautyradar.frontgateway.dto.ClientDto;
-import ru.beautyradar.frontgateway.dto.UserDto;
 import ru.beautyradar.frontgateway.dto.wrap.swagger.*;
 import ru.beautyradar.frontgateway.service.inter.ClientService;
 

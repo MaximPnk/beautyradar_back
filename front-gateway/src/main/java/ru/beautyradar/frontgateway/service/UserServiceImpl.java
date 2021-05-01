@@ -2,17 +2,20 @@ package ru.beautyradar.frontgateway.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import ru.beautyradar.frontgateway.dao.UserRepository;
 import ru.beautyradar.frontgateway.dto.UserDto;
 import ru.beautyradar.frontgateway.dto.wrap.InitResp;
 import ru.beautyradar.frontgateway.dto.wrap.Resp;
+import ru.beautyradar.frontgateway.entity.GalleryEntity;
 import ru.beautyradar.frontgateway.entity.UserEntity;
 import ru.beautyradar.frontgateway.exc.ResourceNotFoundException;
 import ru.beautyradar.frontgateway.map.UserMapper;
 import ru.beautyradar.frontgateway.service.inter.UserService;
 
+import javax.swing.undo.AbstractUndoableEdit;
 import javax.transaction.Transactional;
 import java.sql.SQLException;
 import java.util.Optional;
@@ -22,8 +25,30 @@ import java.util.Optional;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-    private final UserMapper userMapper;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private UserMapper userMapper;
+
+
+    @Override
+    public Resp<?> saveAndUpdatePhoto(byte[] image, Long id) {
+        try {
+            UserEntity user = userRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Can not found User id for saving photo"));
+            user.setAvatar(image);
+            return new InitResp<>().ok(userRepository.save(user));
+        } catch (DataAccessException e) {
+            log.error(e.getMessage());
+            if (e.getRootCause() instanceof SQLException) {
+                SQLException sqlEx = (SQLException) e.getRootCause();
+                return new InitResp<>().exc(Integer.parseInt(sqlEx.getSQLState()), sqlEx.getMessage());
+            }
+            return new InitResp<>().exc(1, e.getMessage());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new InitResp<>().exc(1, e.getMessage());
+        }
+    }
 
     @Override
     public Resp<?> getUsers() {
@@ -138,4 +163,6 @@ public class UserServiceImpl implements UserService {
             return new InitResp<>().exc(1, e.getMessage());
         }
     }
+
+
 }
