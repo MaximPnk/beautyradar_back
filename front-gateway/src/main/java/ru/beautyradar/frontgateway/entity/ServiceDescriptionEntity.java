@@ -18,11 +18,11 @@ public class ServiceDescriptionEntity {
     private Long id;
 
     @OneToOne (cascade = CascadeType.ALL)
-    @Column(name = "master_id")
+    @JoinColumn(name = "master_id")
     private MasterEntity master;
 
     @OneToOne (cascade = CascadeType.ALL)
-    @Column(name = "service_category_id")
+    @JoinColumn(name = "service_category_id")
     private ServiceCategoryEntity serviceCategory;
 
     @Column(name = "duration")

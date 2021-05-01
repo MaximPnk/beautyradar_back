@@ -23,7 +23,7 @@ public class GalleryEntity {
     private Long id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @Column(name = "master_id")
+    @JoinColumn(name = "master_id")
     private MasterEntity master;
 
     @Column(name = "img")

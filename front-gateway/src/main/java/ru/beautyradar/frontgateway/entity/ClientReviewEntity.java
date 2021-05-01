@@ -22,11 +22,11 @@ public class ClientReviewEntity {
     private Long id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @Column(name = "client_id")
+    @JoinColumn(name = "client_id")
     private ClientEntity client;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @Column(name="master_id")
+    @JoinColumn(name="master_id")
     private MasterEntity master;
 
     @Column(name="rating")

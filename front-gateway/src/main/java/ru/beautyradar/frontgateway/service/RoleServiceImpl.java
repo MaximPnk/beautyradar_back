@@ -12,6 +12,7 @@ import ru.beautyradar.frontgateway.entity.UserEntity;
 import ru.beautyradar.frontgateway.map.RoleMapper;
 import ru.beautyradar.frontgateway.service.inter.RoleService;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,28 +24,9 @@ public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository repository;
 
-    @Override
-    public List<RoleEntity> getRolesByUserDto(UserDto userDto) {
-        return null;
-    }
 
     @Override
-    public List<RoleEntity> getRolesByUser(UserEntity user) {
-        return null;
+    public List<RoleEntity> findRoles(Long id) {
+        return repository.findAllById(Collections.singleton(id));
     }
-    //todo - это служебные классы наверно нет смысла
-
-//
-//    @Override
-//    public List<RoleEntity> getRolesByUserDto(UserDto userDto) {
-//       return userDto.getUserRolesId().stream().map(repository::findRoleEntitiesById).collect(Collectors.toList());
-//
-//    }
-//
-//    @Override
-//    public Optional<List<RoleEntity>> getRolesByUser(UserEntity user) {
-//        return repository.findRoleEntitiesById(userDto.getId());
-//    }
-
-
 }
