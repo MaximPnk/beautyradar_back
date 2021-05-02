@@ -19,10 +19,10 @@ public class GalleryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "master_id")
+    @Column(name = "gallery_id")
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "master_id")
     private MasterEntity master;
 

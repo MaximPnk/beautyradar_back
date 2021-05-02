@@ -29,6 +29,9 @@ public class MasterEntity {
     @Column(name = "address")
     private String address;
 
+    @Column(name="coordinates")
+    private String coordinates;
+
     @Column(name = "rating")
     private Double rating;
 

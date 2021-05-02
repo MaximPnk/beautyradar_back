@@ -16,4 +16,7 @@ public interface UserService {
     Resp<?> updateUser(UserDto userDto);
 
     Resp<?> deleteUserByUpn(String upn);
+
+    Resp<?> saveAndUpdatePhoto(byte[] bytes, Long id);
+
 }
