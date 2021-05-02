@@ -2,20 +2,20 @@ package ru.beautyradar.frontgateway.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import ru.beautyradar.frontgateway.dao.UserRepository;
 import ru.beautyradar.frontgateway.dto.UserDto;
 import ru.beautyradar.frontgateway.dto.wrap.InitResp;
 import ru.beautyradar.frontgateway.dto.wrap.Resp;
-import ru.beautyradar.frontgateway.entity.GalleryEntity;
 import ru.beautyradar.frontgateway.entity.UserEntity;
+import ru.beautyradar.frontgateway.event.SaveClientEvent;
 import ru.beautyradar.frontgateway.exc.ResourceNotFoundException;
 import ru.beautyradar.frontgateway.map.UserMapper;
+import ru.beautyradar.frontgateway.service.inter.ClientService;
 import ru.beautyradar.frontgateway.service.inter.UserService;
 
-import javax.swing.undo.AbstractUndoableEdit;
 import javax.transaction.Transactional;
 import java.sql.SQLException;
 import java.util.Optional;
@@ -25,10 +25,10 @@ import java.util.Optional;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserMapper userMapper;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final ClientService clientService;
+    private final ApplicationEventPublisher publisher;
 
 
     @Override
@@ -105,9 +105,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Resp<?> saveUser(UserDto userDto) {
         try {
             UserEntity entity = userRepository.save(userMapper.mapDtoToEntity(userDto));
+            publisher.publishEvent(new SaveClientEvent(clientService, entity));
             return new InitResp<>().ok(userMapper.mapEntityToDto(entity));
         } catch (DataAccessException e) {
             log.error(e.getMessage());
