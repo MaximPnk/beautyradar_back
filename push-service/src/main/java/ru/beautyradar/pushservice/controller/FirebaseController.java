@@ -2,6 +2,7 @@ package ru.beautyradar.pushservice.controller;
 
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,7 @@ import ru.beautyradar.pushservice.service.inter.UserService;
 @RestController
 @RequestMapping("/push")
 @RequiredArgsConstructor
+@Slf4j
 public class FirebaseController {
 
     private final FirebaseService firebaseService;
@@ -32,6 +34,8 @@ public class FirebaseController {
             return ResponseEntity.ok(tokenResponse);
         }
 
-        return ResponseEntity.ok(firebaseService.send(privateMsg, (String) tokenResponse.getBody()));
+        log.info(tokenResponse.getBody().toString());
+
+        return ResponseEntity.ok(firebaseService.send(privateMsg, tokenResponse.getBody().toString()));
     }
 }

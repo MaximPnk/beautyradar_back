@@ -87,6 +87,8 @@ public class ClientServiceImpl implements ClientService {
     @Async
     @EventListener
     public void saveClient(SaveClientEvent event) {
+        log.info(event.toString());
+        log.info(event.getUserEntity().toString());
         repository.save(new ClientEntity(event.getUserEntity()));
     }
 
