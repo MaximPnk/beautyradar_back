@@ -34,11 +34,11 @@ public class ClientController {
         return ResponseEntity.ok(service.findById(id));
     }
 
-    @ApiOperation(value = "Create new client", httpMethod = "POST", notes = "Создание клиента", response = ClientResponse.class)
+    /*@ApiOperation(value = "Create new client", httpMethod = "POST", notes = "Создание клиента", response = ClientResponse.class)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
     @PostMapping("/")
     public ResponseEntity<?> saveUser(@RequestBody ClientDto dto) {
         return ResponseEntity.ok(service.saveClient(dto));
-    }
+    }*/
 
 }

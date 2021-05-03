@@ -43,4 +43,7 @@ public class ClientEntity {
             inverseJoinColumns = @JoinColumn(name = "master_id"))
     private List<MasterEntity> favoriteMasters;
 
+    public ClientEntity(UserEntity user) {
+        this.user = user;
+    }
 }
