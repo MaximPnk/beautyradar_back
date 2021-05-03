@@ -84,7 +84,6 @@ public class ClientServiceImpl implements ClientService {
     //здесь, при надобности, может быть перегруженный отдельный метод сейва
 
     @Override
-    @Async
     @EventListener
     public void saveClient(SaveClientEvent event) {
         log.info(event.toString());
