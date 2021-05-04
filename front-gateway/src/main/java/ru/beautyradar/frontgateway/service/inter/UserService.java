@@ -17,6 +17,4 @@ public interface UserService {
 
     Resp<?> deleteUserByUpn(String upn);
 
-    Resp<?> saveAndUpdatePhoto(byte[] bytes, Long id);
-
 }

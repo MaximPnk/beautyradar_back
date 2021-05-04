@@ -17,7 +17,7 @@ public class SwaggerConfig {
      *
      * Swagger url:
      *
-     * http://localhost:9991/swagger-ui.html
+     * http://localhost:9991/pushservice/swagger-ui.html
      *
      */
 

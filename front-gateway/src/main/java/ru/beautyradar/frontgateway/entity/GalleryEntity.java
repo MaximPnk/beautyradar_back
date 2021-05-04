@@ -27,10 +27,10 @@ public class GalleryEntity {
     private MasterEntity master;
 
     @Column(name = "img")
-    private byte[] image;
+    private String image;
 
     @Column(name = "preview_img")
-    private byte [] preview;
+    private String preview;
 
     @Column(name = "created_at")
     @CreationTimestamp

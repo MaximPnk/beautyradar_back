@@ -41,7 +41,7 @@ public class UserEntity {
     private String email;
 
     @Column(name = "img")
-    private byte[] avatar;
+    private String img;
 
     @Column(name = "created_at")
     @CreationTimestamp
