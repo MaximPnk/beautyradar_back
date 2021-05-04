@@ -25,12 +25,12 @@ public class UserMapper {
         UserEntity entity = new UserEntity();
         entity.setId(dto.getId());
         entity.setUpn(dto.getUpn());
-        entity.setToken(dto.getToken());
         mapDtoToEntity(dto, entity);
         return entity;
     }
 
     public void mapDtoToEntity(UserDto dto, UserEntity entity) {
+        entity.setToken(dto.getToken());
         entity.setLogin(dto.getLogin());
         entity.setName(dto.getName());
         entity.setEmail(dto.getEmail());
