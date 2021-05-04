@@ -70,6 +70,7 @@ public class AvatarServiceImpl implements AvatarService {
                 return new InitResp<>().exc(1, "User not found");
             }
 
+            user.setImg(null);
             Resp<?> deleteResp = fileService.delete(user.getImg());
             if (deleteResp.getCode() != 0) {
                 return deleteResp;
