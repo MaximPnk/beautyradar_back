@@ -9,8 +9,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class PrivateMsg {
-    private String upn;
+public class PrivatePush {
+    private Long id;
     private String title;
     private String msg;
 }

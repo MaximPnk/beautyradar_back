@@ -6,4 +6,6 @@ import ru.beautyradar.uploadservice.wrap.Resp;
 public interface AvatarService {
 
     Resp<?> updateUserAvatar(Long userId, MultipartFile multipartFile);
+
+    Resp<?> delete(Long userId);
 }

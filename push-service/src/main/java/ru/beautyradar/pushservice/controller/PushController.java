@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.beautyradar.pushservice.dto.wrap.Resp;
 import ru.beautyradar.pushservice.dto.wrap.swagger.StringResponse;
-import ru.beautyradar.pushservice.model.PrivateMsg;
-import ru.beautyradar.pushservice.service.inter.FirebaseService;
+import ru.beautyradar.pushservice.model.PrivatePush;
+import ru.beautyradar.pushservice.service.inter.PushService;
 import ru.beautyradar.pushservice.service.inter.UserService;
 
 @Api(value = "FirebaseController", tags = {"Firebase"})
@@ -20,22 +20,22 @@ import ru.beautyradar.pushservice.service.inter.UserService;
 @RequestMapping("/push")
 @RequiredArgsConstructor
 @Slf4j
-public class FirebaseController {
+public class PushController {
 
-    private final FirebaseService firebaseService;
+    private final PushService pushService;
     private final UserService userService;
 
     @ApiOperation(value = "Push", httpMethod = "POST", notes = "Отправка личного push-уведомления", response = StringResponse.class)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
     @PostMapping("/")
-    public ResponseEntity<?> sendMessage(@RequestBody PrivateMsg privateMsg) {
-        Resp<?> tokenResponse = userService.getTokenByUpn(privateMsg.getUpn());
+    public ResponseEntity<?> sendMessage(@RequestBody PrivatePush privatePush) {
+        Resp<?> tokenResponse = userService.getTokenByUpn(privatePush.getId());
         if (tokenResponse.getCode() != 0) {
             return ResponseEntity.ok(tokenResponse);
         }
 
         log.info(tokenResponse.getBody().toString());
 
-        return ResponseEntity.ok(firebaseService.send(privateMsg, tokenResponse.getBody().toString()));
+        return ResponseEntity.ok(pushService.send(privatePush, tokenResponse.getBody().toString()));
     }
 }

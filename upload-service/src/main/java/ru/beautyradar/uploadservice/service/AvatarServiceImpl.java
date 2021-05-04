@@ -24,16 +24,13 @@ public class AvatarServiceImpl implements AvatarService {
     @Override
     @Transactional
     public Resp<?> updateUserAvatar(Long userId, MultipartFile multipartFile) {
-
         try {
 
             Resp<?> userResp = userService.findUserById(userId);
             if (userResp.getCode() != 0) {
                 return userResp;
             }
-
             UserEntity user = (UserEntity) userResp.getBody();
-
             if (user == null) {
                 return new InitResp<>().exc(1, "User not found");
             }
@@ -47,7 +44,6 @@ public class AvatarServiceImpl implements AvatarService {
 
             Resp<?> uploadResp = fileService.upload(multipartFile);
             String url = uploadResp.getBody().toString();
-
             if (uploadResp.getCode() != 0) {
                 return uploadResp;
             }
@@ -58,6 +54,31 @@ public class AvatarServiceImpl implements AvatarService {
             log.info(e.getMessage());
             return new InitResp<>().exc(1, e.getMessage());
         }
+    }
 
+    @Override
+    @Transactional
+    public Resp<?> delete(Long userId) {
+        try {
+
+            Resp<?> userResp = userService.findUserById(userId);
+            if (userResp.getCode() != 0) {
+                return userResp;
+            }
+            UserEntity user = (UserEntity) userResp.getBody();
+            if (user == null) {
+                return new InitResp<>().exc(1, "User not found");
+            }
+
+            Resp<?> deleteResp = fileService.delete(user.getImg());
+            if (deleteResp.getCode() != 0) {
+                return deleteResp;
+            }
+
+            return new InitResp<>().ok(null);
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            return new InitResp<>().exc(1, e.getMessage());
+        }
     }
 }

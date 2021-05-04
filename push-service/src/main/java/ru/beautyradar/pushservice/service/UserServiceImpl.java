@@ -21,13 +21,13 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public Resp<?> getTokenByUpn(String upn) {
+    public Resp<?> getTokenByUpn(Long id) {
         try {
-            Optional<UserEntity> optionalUser = userRepository.findFirstByUpn(upn);
+            Optional<UserEntity> optionalUser = userRepository.findById(id);
             if (optionalUser.isPresent()) {
                 return new InitResp<>().ok(optionalUser.get().getToken());
             }
-            return new InitResp<>().exc(1, "User with this UPN not found");
+            return new InitResp<>().exc(1, "User with this id not found");
         } catch (DataAccessException e) {
             log.error(e.getMessage());
             if (e.getRootCause() instanceof SQLException) {

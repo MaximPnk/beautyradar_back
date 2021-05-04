@@ -6,22 +6,22 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.beautyradar.pushservice.dto.wrap.InitResp;
 import ru.beautyradar.pushservice.dto.wrap.Resp;
-import ru.beautyradar.pushservice.model.PrivateMsg;
-import ru.beautyradar.pushservice.service.inter.FirebaseService;
+import ru.beautyradar.pushservice.model.PrivatePush;
+import ru.beautyradar.pushservice.service.inter.PushService;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class FirebaseServiceImpl implements FirebaseService {
+public class PushServiceImpl implements PushService {
 
     private final FirebaseMessaging firebaseMessaging;
 
     @Override
-    public Resp<?> send(PrivateMsg privateMsg, String token) {
+    public Resp<?> send(PrivatePush privatePush, String token) {
         Notification notification = Notification
                 .builder()
-                .setTitle(privateMsg.getTitle())
-                .setBody(privateMsg.getMsg())
+                .setTitle(privatePush.getTitle())
+                .setBody(privatePush.getMsg())
 //                .setImage("")
                 .build();
 
