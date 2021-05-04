@@ -29,11 +29,4 @@ public class GalleryController {
     private GalleryService service;
 
 
-    @ApiOperation(value = "Save new photo in master gallery", httpMethod = "POST", notes = "Сохранение фотографии по master ID ", response = SavePhotoResponse.class)
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
-    @PostMapping("/")
-    public ResponseEntity<?> saveUser(@RequestParam MultipartFile image, Long id) throws IOException {
-        return ResponseEntity.ok(service.savePhoto(image.getBytes(), id));
-    }
-
 }

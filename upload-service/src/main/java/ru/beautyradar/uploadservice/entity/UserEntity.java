@@ -1,4 +1,4 @@
-package ru.beautyradar.pushservice.entity;
+package ru.beautyradar.uploadservice.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -27,14 +27,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @ApiOperation(value = "Save and update avatar for user ID", httpMethod = "POST", notes = "Сохранение или обновление аватара по User ID ", response = SavePhotoResponse.class)
-    // todo- правильно описать тип ответа
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
-    @PostMapping("/ava")
-    public ResponseEntity<?> saveAndUpdateUserAvatar(@RequestParam MultipartFile image, Long id) throws IOException { // todo- надо обработать ошибку в другом месте
-        return ResponseEntity.ok(userService.saveAndUpdatePhoto(image.getBytes(), id));
-    }
-
     @ApiOperation(value = "Get user list", httpMethod = "GET", notes = "Получение списка пользователей", response = UserListResponse.class)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
     @GetMapping("/")

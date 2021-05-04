@@ -1,4 +1,4 @@
-package ru.beautyradar.frontgateway.config;
+package ru.beautyradar.uploadservice.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ public class SwaggerConfig {
      *
      * Swagger url:
      *
-     * http://localhost:9999/frontgateway/swagger-ui.html
+     * http://localhost:9995/updateservice/swagger-ui.html
      *
      */
 
@@ -25,15 +25,15 @@ public class SwaggerConfig {
     public Docket customImplementation(){
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("ru.beautyradar.frontgateway"))
+                .apis(RequestHandlerSelectors.basePackage("ru.beautyradar.uploadservice"))
                 .build()
                 .apiInfo(apiInfo());
     }
 
     ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("front-gateway")
-                .description("Микросервис обеспечивает взаимодействие между БД и UI-микросервисами")
+                .title("upload-service")
+                .description("Микросервис обеспечивает загрузку файлов")
                 .version("1.0")
                 .build();
     }

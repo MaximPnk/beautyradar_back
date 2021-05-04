@@ -30,26 +30,6 @@ public class UserServiceImpl implements UserService {
     private final ClientService clientService;
     private final ApplicationEventPublisher publisher;
 
-
-    @Override
-    public Resp<?> saveAndUpdatePhoto(byte[] image, Long id) {
-        try {
-            UserEntity user = userRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Can not found User id for saving photo"));
-            user.setAvatar(image);
-            return new InitResp<>().ok(userRepository.save(user));
-        } catch (DataAccessException e) {
-            log.error(e.getMessage());
-            if (e.getRootCause() instanceof SQLException) {
-                SQLException sqlEx = (SQLException) e.getRootCause();
-                return new InitResp<>().exc(Integer.parseInt(sqlEx.getSQLState()), sqlEx.getMessage());
-            }
-            return new InitResp<>().exc(1, e.getMessage());
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
-        }
-    }
-
     @Override
     public Resp<?> getUsers() {
         try {
