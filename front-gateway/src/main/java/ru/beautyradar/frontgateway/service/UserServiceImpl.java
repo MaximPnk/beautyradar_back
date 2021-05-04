@@ -146,5 +146,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public UserEntity findUserById(Long id) {
+        Optional<UserEntity> result = userRepository.findById(id);
+        // todo - стремно так делать
+        return result.orElse(null);
+    }
+
 
 }

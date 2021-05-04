@@ -29,4 +29,9 @@ public class MasterCategoryEntity {
             joinColumns = @JoinColumn(name = "master_category_id"),
             inverseJoinColumns = @JoinColumn(name = "master_id"))
     private List<MasterEntity> master; //todo - нужен ли в БД crated_at?
+
+    public void addMaster(MasterEntity entity) {
+        this.master.add(entity);
+    }
 }
+

@@ -6,16 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import ru.beautyradar.frontgateway.dto.UserDto;
 import ru.beautyradar.frontgateway.dto.wrap.Resp;
 import ru.beautyradar.frontgateway.dto.wrap.swagger.BooleanResponse;
-import ru.beautyradar.frontgateway.dto.wrap.swagger.SavePhotoResponse;
 import ru.beautyradar.frontgateway.dto.wrap.swagger.UserListResponse;
 import ru.beautyradar.frontgateway.dto.wrap.swagger.UserResponse;
 import ru.beautyradar.frontgateway.service.inter.UserService;
 
-import java.io.IOException;
 
 @Api(value = "UserController", tags = {"User"})
 @SwaggerDefinition(tags = {@Tag(name = "User Controller", description = "Контроллер пользователей")})

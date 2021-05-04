@@ -43,6 +43,12 @@ public class UserEntity {
     @Column(name = "img")
     private String img;
 
+    @OneToOne(mappedBy = "user_id")
+    private ClientEntity client;
+
+    @OneToOne(mappedBy = "user_id")
+    private MasterEntity master;
+
     @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
