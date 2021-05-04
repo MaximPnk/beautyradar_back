@@ -50,8 +50,6 @@ public class FileServiceImpl implements FileService {
     public Resp<?> delete(String fileUrl) {
         try {
             String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1, fileUrl.lastIndexOf("?"));
-            System.out.println(fileUrl);
-            System.out.println(fileName);
             BlobId img = BlobId.of(bucketName, fileName);
             storage.delete(img);
             return new InitResp<>().ok(null);
