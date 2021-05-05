@@ -18,5 +18,5 @@ public interface UserService {
 
     Resp<?> deleteUserByUpn(String upn);
 
-    UserEntity findUserById(Long id);
+    Resp<?> findUserById(Long id);
 }

@@ -15,6 +15,6 @@ public interface MasterCategoryService {
 
    void  saveNewMasterCategory(MasterCategoryResponseDTO dto);
 
-   String updateMasterCategory(UpdateMasterCategoryResponseDTO dto);
-//update
+   String updateMasterCategory(Long id,UpdateMasterCategoryResponseDTO dto);
+
 }

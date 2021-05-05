@@ -11,5 +11,4 @@ public class UpdateMasterCategoryResponseDTO {
     private Long categoryID;
     private String masterCategory;
     private String description;
-    private Long masterID;
 }

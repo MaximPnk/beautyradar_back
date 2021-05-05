@@ -29,21 +29,21 @@ public class MasterController {
 
     @ApiOperation(value = "Set master for userID", httpMethod = "POST", notes = "Установить user мастером", response = MasterDto.class)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
-    @PostMapping("/{userId}")
-    public ResponseEntity<?> setMasterByUserId(@PathVariable Long userId) {
+    @PostMapping("/")
+    public ResponseEntity<?> setMasterByUserId(@RequestBody Long userId) {
         return ResponseEntity.ok(masterService.setMasterByUserId(userId));
     }
 
     @ApiOperation(value = "Update master address by master ID", httpMethod = "POST", notes = "Установить адресс мастра по его ID", response = MasterDto.class)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
-    @PostMapping("/address/{masterId}")
+    @PutMapping("/address/{masterId}")
     public ResponseEntity<?> setAddressByMasterId(@PathVariable Long masterId,@RequestBody String address) {
         return ResponseEntity.ok(masterService.setAddressByMasterId(masterId,address));
     }
 
     @ApiOperation(value = "Update coordinates by master ID", httpMethod = "POST", notes = "Установить координаты мастра по его ID", response = MasterDto.class)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
-    @PostMapping("/coordinates/{masterId}")
+    @PutMapping("/coordinates/{masterId}")
     public ResponseEntity<?> setCoordinatesByMasterId(@PathVariable Long masterId,@RequestBody String coordinates) {
         return ResponseEntity.ok(masterService.setCoordinatesByMasterId(masterId,coordinates));
     }

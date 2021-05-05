@@ -14,6 +14,6 @@ public interface MasterCategoryRepository extends JpaRepository<MasterCategoryEn
 
     Optional<MasterCategoryEntity> findById(Long id);
     Optional<MasterCategoryEntity> findByName(String categoryName);
-    Optional<List<MasterCategoryEntity>> findAllByMaster(MasterEntity entity);
+    List<MasterCategoryEntity> findAllByMaster(MasterEntity entity);
 
 }

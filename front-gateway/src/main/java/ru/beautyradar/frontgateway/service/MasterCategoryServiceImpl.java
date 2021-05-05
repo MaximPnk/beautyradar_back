@@ -81,12 +81,12 @@ public class MasterCategoryServiceImpl implements MasterCategoryService {
 
     @Override
     @Transactional
-    public String updateMasterCategory(UpdateMasterCategoryResponseDTO dto) {
-        Optional<MasterCategoryEntity> mc = categoryRepository.findById(dto.getCategoryID());
+    public String updateMasterCategory(Long id,UpdateMasterCategoryResponseDTO dto) {
+        Optional<MasterCategoryEntity> mc = categoryRepository.findById(id);
         if (mc.isPresent()){
             mc.get().setName(dto.getMasterCategory());
             mc.get().setDescription(dto.getDescription());
-            mc.get().addMaster(masterService.getMasterEntityById(dto.getMasterID()));
+            mc.get().addMaster(masterService.getMasterEntityById(id));
             return "Update master category successes";
         }
         else return "Error for update master category";

@@ -75,8 +75,9 @@ public class MasterServiceImpl implements MasterService {
     @Override
     public MasterDto getMasterInfoByUserId(Long id) {
         MasterDto dto = new MasterDto();
-        UserEntity user = userService.findUserById(id);
-        if (user != null) {
+        Resp<?> resp =  userService.findUserById(id);
+        if (resp.getCode()!=0) {
+            UserEntity user = (UserEntity) resp.getBody();//todo - может быть не придвиденная ошибка
             dto.setId(user.getMaster().getId());
             dto.setUserId(user.getId());
             dto.setAddress(user.getMaster().getAddress());

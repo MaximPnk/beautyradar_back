@@ -147,10 +147,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity findUserById(Long id) {
-        Optional<UserEntity> result = userRepository.findById(id);
-        // todo - стремно так делать
-        return result.orElse(null);
+    public Resp<?> findUserById(Long id) {
+        try {
+            Optional<UserEntity> result = userRepository.findById(id);
+            return new InitResp<>().ok(result);
+        } catch (DataAccessException e) {
+            log.error(e.getMessage());
+            if (e.getRootCause() instanceof SQLException) {
+                SQLException sqlEx = (SQLException) e.getRootCause();
+                return new InitResp<>().exc(Integer.parseInt(sqlEx.getSQLState()), sqlEx.getMessage());
+            }
+            return new InitResp<>().exc(1, e.getMessage());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new InitResp<>().exc(1, e.getMessage());
+        }
     }
 
 

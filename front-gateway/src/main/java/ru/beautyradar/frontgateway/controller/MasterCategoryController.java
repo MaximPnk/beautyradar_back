@@ -31,16 +31,16 @@ public class MasterCategoryController {
     @ApiOperation(value = "Create new master category", httpMethod = "POST", notes = "Создание новой категории мастера", response = String.class)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
     @PostMapping("/")
-    public ResponseEntity<?> saveNewCategory(@PathVariable MasterCategoryResponseDTO dto) {
+    public ResponseEntity<?> saveNewCategory(@RequestBody MasterCategoryResponseDTO dto) {
         MCategoryService.saveNewMasterCategory(dto);
         return ResponseEntity.ok("New master category added");
     }
 
     @ApiOperation(value = "Update name & description master category", httpMethod = "PUT", notes = "Обновление названия и описания категории мастера", response = String.class)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
-    @PutMapping("/")
-    public ResponseEntity<?> saveNewCategory(@PathVariable UpdateMasterCategoryResponseDTO dto) {
-        return ResponseEntity.ok(MCategoryService.updateMasterCategory(dto));
+    @PutMapping("/{masterId}")
+    public ResponseEntity<?> saveNewCategory(@PathVariable Long masterId, @RequestBody UpdateMasterCategoryResponseDTO dto) {
+        return ResponseEntity.ok(MCategoryService.updateMasterCategory(masterId,dto));
     }
 
 
