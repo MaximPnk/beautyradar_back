@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PrivatePush {
-    private Long id;
+    private Long userId;
     private String title;
     private String msg;
 }

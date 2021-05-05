@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public Resp<?> getTokenByUpn(Long id) {
+    public Resp<?> getTokenById(Long id) {
         try {
             Optional<UserEntity> optionalUser = userRepository.findById(id);
             if (optionalUser.isPresent()) {

@@ -4,6 +4,6 @@ import ru.beautyradar.pushservice.dto.wrap.Resp;
 
 public interface UserService {
 
-    Resp<?> getTokenByUpn(Long id);
+    Resp<?> getTokenById(Long id);
 
 }

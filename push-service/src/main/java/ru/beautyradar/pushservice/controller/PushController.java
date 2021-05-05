@@ -29,13 +29,10 @@ public class PushController {
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
     @PostMapping("/")
     public ResponseEntity<?> sendMessage(@RequestBody PrivatePush privatePush) {
-        Resp<?> tokenResponse = userService.getTokenByUpn(privatePush.getId());
+        Resp<?> tokenResponse = userService.getTokenById(privatePush.getUserId());
         if (tokenResponse.getCode() != 0) {
             return ResponseEntity.ok(tokenResponse);
         }
-
-        log.info(tokenResponse.getBody().toString());
-
         return ResponseEntity.ok(pushService.send(privatePush, tokenResponse.getBody().toString()));
     }
 }
