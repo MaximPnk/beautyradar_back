@@ -8,8 +8,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.beautyradar.frontgateway.dao.ClientRepository;
-import ru.beautyradar.frontgateway.dto.wrap.InitResp;
 import ru.beautyradar.frontgateway.dto.wrap.Resp;
+import ru.beautyradar.frontgateway.dto.wrap.RespBuilder;
 import ru.beautyradar.frontgateway.entity.ClientEntity;
 import ru.beautyradar.frontgateway.entity.UserEntity;
 import ru.beautyradar.frontgateway.event.SaveClientEvent;
@@ -30,10 +30,10 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Resp<?> getAllClientsDto() {
         try {
-            return new InitResp<>().ok(repository.findAll().stream().map(mapper::mapEntityToDto));
+            return new RespBuilder<>().setCode(0).setBody(repository.findAll().stream().map(mapper::mapEntityToDto)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -41,10 +41,10 @@ public class ClientServiceImpl implements ClientService {
     public Resp<?> getClientDtoById(Long id) {
         try {
             ClientEntity clientEntity = getClientEntityById(id);
-            return new InitResp<>().ok(mapper.mapEntityToDto(clientEntity));
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(clientEntity)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
 
     }
@@ -55,12 +55,14 @@ public class ClientServiceImpl implements ClientService {
         try {
             UserEntity userEntity = userService.getUserEntityById(id);
             ClientEntity clientEntity = getClientEntityByUser(userEntity);
-            return new InitResp<>().ok(mapper.mapEntityToDto(clientEntity));
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(clientEntity)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
+
+    //event listener
 
     @Override
     @EventListener
