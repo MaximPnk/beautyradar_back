@@ -26,7 +26,7 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     @Transactional
-    public Resp<?> getAllFavoriteMastersByClientId(Long id) {
+    public Resp<?> getAllFavoriteMastersDtoByClientId(Long id) {
         try {
             ClientEntity client = clientService.getClientEntityById(id);
             List<MasterEntity> masters = client.getFavoriteMasters();

@@ -23,7 +23,7 @@ public class FavoriteController {
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
     @GetMapping("/client/{clientId}")
     public ResponseEntity<?> getAllFavoriteMastersByClientId(@PathVariable("clientId") Long clientId) {
-        return ResponseEntity.ok(favoriteService.getAllFavoriteMastersByClientId(clientId));
+        return ResponseEntity.ok(favoriteService.getAllFavoriteMastersDtoByClientId(clientId));
     }
 
     @ApiOperation(value = "Add favorite master", httpMethod = "PUT", notes = "Добавление мастера в избранное клиента", response = Resp.class)
