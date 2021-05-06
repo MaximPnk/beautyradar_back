@@ -120,6 +120,8 @@ public class UserServiceImpl implements UserService {
         return repository.findFirstByUpn(upn).orElseThrow(() -> new ResourceNotFoundException("Пользователь с таким uid не найден"));
     }
 
+    //cyclic
+
     @Autowired
     public void setClientService(ClientService clientService) {
         this.clientService = clientService;

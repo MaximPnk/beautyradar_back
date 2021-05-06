@@ -16,6 +16,10 @@ import ru.beautyradar.frontgateway.service.inter.ClientService;
 @Slf4j
 public class ClientController {
 
+    //todo add to favorite
+    //todo delete from favorite
+    //todo get all favorites
+
     private final ClientService clientService;
 
     @ApiOperation(value = "Get client list", httpMethod = "GET", notes = "Получение списка клиентов", response = ClientListResponse.class)

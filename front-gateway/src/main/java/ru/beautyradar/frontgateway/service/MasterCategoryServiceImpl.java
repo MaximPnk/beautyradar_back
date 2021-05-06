@@ -104,6 +104,8 @@ public class MasterCategoryServiceImpl implements MasterCategoryService {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Категория с таким ID не существует"));
     }
 
+    //cyclic
+
     @Autowired
     public void setMasterService(MasterService masterService) {
         this.masterService = masterService;
