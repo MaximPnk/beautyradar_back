@@ -2,10 +2,10 @@ package ru.beautyradar.frontgateway.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
-import org.springframework.dao.DataAccessException;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.beautyradar.frontgateway.dao.ClientRepository;
 import ru.beautyradar.frontgateway.dto.wrap.InitResp;
 import ru.beautyradar.frontgateway.dto.wrap.Resp;
@@ -15,8 +15,7 @@ import ru.beautyradar.frontgateway.event.SaveClientEvent;
 import ru.beautyradar.frontgateway.exc.ResourceNotFoundException;
 import ru.beautyradar.frontgateway.map.ClientMapper;
 import ru.beautyradar.frontgateway.service.inter.ClientService;
-
-import java.sql.SQLException;
+import ru.beautyradar.frontgateway.service.inter.UserService;
 
 @Service
 @RequiredArgsConstructor
@@ -24,20 +23,14 @@ import java.sql.SQLException;
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository repository;
-    private final ClientMapper clientMapper;
+    private final ClientMapper mapper;
+    private UserService userService;
 
 
     @Override
-    public Resp<?> getAllClients() {
+    public Resp<?> getAllClientsDto() {
         try {
-            return new InitResp<>().ok(repository.findAll().stream().map(clientMapper::mapEntityToDto));
-        } catch (DataAccessException e) {
-            log.error(e.getMessage());
-            if (e.getRootCause() instanceof SQLException) {
-                SQLException sqlEx = (SQLException) e.getRootCause();
-                return new InitResp<>().exc(Integer.parseInt(sqlEx.getSQLState()), sqlEx.getMessage());
-            }
-            return new InitResp<>().exc(1, e.getMessage());
+            return new InitResp<>().ok(repository.findAll().stream().map(mapper::mapEntityToDto));
         } catch (Exception e) {
             log.error(e.getMessage());
             return new InitResp<>().exc(1, e.getMessage());
@@ -45,17 +38,10 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Resp<?> findById(Long id) {
+    public Resp<?> getClientDtoById(Long id) {
         try{
-            return new InitResp<>().ok( repository.findById(id).orElseThrow(
-                    ()->new ResourceNotFoundException("No such client")));
-        }catch (DataAccessException e) {
-            log.error(e.getMessage());
-            if (e.getRootCause() instanceof SQLException) {
-                SQLException sqlEx = (SQLException) e.getRootCause();
-                return new InitResp<>().exc(Integer.parseInt(sqlEx.getSQLState()), sqlEx.getMessage());
-            }
-            return new InitResp<>().exc(1, e.getMessage());
+            ClientEntity clientEntity = getClientEntityById(id);
+            return new InitResp<>().ok(mapper.mapEntityToDto(clientEntity));
         } catch (Exception e) {
             log.error(e.getMessage());
             return new InitResp<>().exc(1, e.getMessage());
@@ -64,31 +50,40 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Resp<?> findByUser(UserEntity entity) {
+    @Transactional
+    public Resp<?> getClientDtoByUserId(Long id) {
         try{
-            return new InitResp<>().ok(repository.findByUser(entity).orElseThrow(
-                    ()->new ResourceNotFoundException("No such client")));
-        }catch (DataAccessException e) {
-            log.error(e.getMessage());
-            if (e.getRootCause() instanceof SQLException) {
-                SQLException sqlEx = (SQLException) e.getRootCause();
-                return new InitResp<>().exc(Integer.parseInt(sqlEx.getSQLState()), sqlEx.getMessage());
-            }
-            return new InitResp<>().exc(1, e.getMessage());
+            UserEntity userEntity = userService.getUserEntityById(id);
+            ClientEntity clientEntity = getClientEntityByUser(userEntity);
+            return new InitResp<>().ok(mapper.mapEntityToDto(clientEntity));
         } catch (Exception e) {
             log.error(e.getMessage());
             return new InitResp<>().exc(1, e.getMessage());
         }
     }
-
-    //здесь, при надобности, может быть перегруженный отдельный метод сейва
 
     @Override
     @EventListener
     public void saveClient(SaveClientEvent event) {
-        log.info(event.toString());
-        log.info(event.getUserEntity().toString());
         repository.save(new ClientEntity(event.getUserEntity()));
     }
 
+    //service methods
+
+    @Override
+    public ClientEntity getClientEntityById(Long id) {
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Клиент с таким ID не существует"));
+    }
+
+    @Override
+    public ClientEntity getClientEntityByUser(UserEntity userEntity) {
+        return repository.findByUser(userEntity).orElseThrow(() -> new ResourceNotFoundException("Пользователь не является клиентом"));
+    }
+
+    //cyclic
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 }

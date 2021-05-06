@@ -53,6 +53,6 @@ public class MasterEntity {
     @JoinTable(name = "master_categories",
             joinColumns = @JoinColumn(name = "master_id"),
             inverseJoinColumns = @JoinColumn(name = "master_category_id"))
-    private List<MasterCategoryEntity> masterCategory;
+    private List<MasterCategoryEntity> masterCategories;
 
 }

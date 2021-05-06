@@ -3,7 +3,6 @@ package ru.beautyradar.frontgateway.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import ru.beautyradar.frontgateway.dao.UserRepository;
 import ru.beautyradar.frontgateway.dto.UserDto;
@@ -17,30 +16,21 @@ import ru.beautyradar.frontgateway.service.inter.ClientService;
 import ru.beautyradar.frontgateway.service.inter.UserService;
 
 import javax.transaction.Transactional;
-import java.sql.SQLException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-    private final UserMapper userMapper;
+    private final UserRepository repository;
+    private final UserMapper mapper;
     private final ClientService clientService;
     private final ApplicationEventPublisher publisher;
 
     @Override
-    public Resp<?> getUsers() {
+    public Resp<?> getAllUsersDto() {
         try {
-            return new InitResp<>().ok(userRepository.findAll().stream().map(userMapper::mapEntityToDto));
-        } catch (DataAccessException e) {
-            log.error(e.getMessage());
-            if (e.getRootCause() instanceof SQLException) {
-                SQLException sqlEx = (SQLException) e.getRootCause();
-                return new InitResp<>().exc(Integer.parseInt(sqlEx.getSQLState()), sqlEx.getMessage());
-            }
-            return new InitResp<>().exc(1, e.getMessage());
+            return new InitResp<>().ok(repository.findAll().stream().map(mapper::mapEntityToDto));
         } catch (Exception e) {
             log.error(e.getMessage());
             return new InitResp<>().exc(1, e.getMessage());
@@ -48,19 +38,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Resp<?> getUserByUpn(String upn) {
-        UserDto userDto;
+    public Resp<?> getUserDtoById(Long id) {
         try {
-            Optional<UserEntity> userEntity = userRepository.findFirstByUpn(upn);
-            userDto = userEntity.map(userMapper::mapEntityToDto).orElse(null);
-            return new InitResp<>().ok(userDto);
-        } catch (DataAccessException e) {
+            UserEntity userEntity = getUserEntityById(id);
+            return new InitResp<>().ok(mapper.mapEntityToDto(userEntity));
+        } catch (Exception e) {
             log.error(e.getMessage());
-            if (e.getRootCause() instanceof SQLException) {
-                SQLException sqlEx = (SQLException) e.getRootCause();
-                return new InitResp<>().exc(Integer.parseInt(sqlEx.getSQLState()), sqlEx.getMessage());
-            }
             return new InitResp<>().exc(1, e.getMessage());
+        }
+    }
+
+    @Override
+    public Resp<?> getUserDtoByUpn(String upn) {
+        try {
+            UserEntity userEntity = getUserEntityByUpn(upn);
+            return new InitResp<>().ok(mapper.mapEntityToDto(userEntity));
         } catch (Exception e) {
             log.error(e.getMessage());
             return new InitResp<>().exc(1, e.getMessage());
@@ -70,14 +62,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Resp<?> existsUserByUpn(String upn) {
         try {
-            return new InitResp<>().ok(userRepository.existsByUpn(upn));
-        } catch (DataAccessException e) {
-            log.error(e.getMessage());
-            if (e.getRootCause() instanceof SQLException) {
-                SQLException sqlEx = (SQLException) e.getRootCause();
-                return new InitResp<>().exc(Integer.parseInt(sqlEx.getSQLState()), sqlEx.getMessage());
-            }
-            return new InitResp<>().exc(1, e.getMessage());
+            return new InitResp<>().ok(repository.existsByUpn(upn));
         } catch (Exception e) {
             log.error(e.getMessage());
             return new InitResp<>().exc(1, e.getMessage());
@@ -88,16 +73,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public Resp<?> saveUser(UserDto userDto) {
         try {
-            UserEntity entity = userRepository.save(userMapper.mapDtoToEntity(userDto));
+            UserEntity entity = repository.save(mapper.mapDtoToEntity(userDto));
             publisher.publishEvent(new SaveClientEvent(clientService, entity));
-            return new InitResp<>().ok(userMapper.mapEntityToDto(entity));
-        } catch (DataAccessException e) {
-            log.error(e.getMessage());
-            if (e.getRootCause() instanceof SQLException) {
-                SQLException sqlEx = (SQLException) e.getRootCause();
-                return new InitResp<>().exc(Integer.parseInt(sqlEx.getSQLState()), sqlEx.getMessage());
-            }
-            return new InitResp<>().exc(1, e.getMessage());
+            return new InitResp<>().ok(mapper.mapEntityToDto(entity));
         } catch (Exception e) {
             log.error(e.getMessage());
             return new InitResp<>().exc(1, e.getMessage());
@@ -106,19 +84,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Resp<?> updateUser(UserDto userDto) {
+    public Resp<?> updateUser(Long id, UserDto userDto) {
         try {
-            Optional<UserEntity> optionalEntity = userRepository.findFirstByUpn(userDto.getUpn());
-            UserEntity entity = optionalEntity.orElseThrow(() -> new ResourceNotFoundException("Пользователя с указанным UPN не существует"));
-            userMapper.mapDtoToEntity(userDto, entity);
-            return new InitResp<>().ok(userMapper.mapEntityToDto(entity));
-        } catch (DataAccessException e) {
-            log.error(e.getMessage());
-            if (e.getRootCause() instanceof SQLException) {
-                SQLException sqlEx = (SQLException) e.getRootCause();
-                return new InitResp<>().exc(Integer.parseInt(sqlEx.getSQLState()), sqlEx.getMessage());
-            }
-            return new InitResp<>().exc(1, e.getMessage());
+            UserEntity userEntity = getUserEntityById(id);
+            mapper.updateEntityByDto(userEntity, userDto);
+            return new InitResp<>().ok(mapper.mapEntityToDto(userEntity));
         } catch (Exception e) {
             log.error(e.getMessage());
             return new InitResp<>().exc(1, e.getMessage());
@@ -127,42 +97,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Resp<?> deleteUserByUpn(String upn) {
+    public Resp<?> deleteUserById(Long id) {
         try {
-            Optional<UserEntity> optionalEntity = userRepository.findFirstByUpn(upn);
-            UserEntity entity = optionalEntity.orElseThrow(() -> new ResourceNotFoundException("Пользователя с указанным UPN не существует"));
-            userRepository.delete(entity);
+            repository.deleteById(id);
             return new InitResp<>().ok(null);
-        } catch (DataAccessException e) {
-            log.error(e.getMessage());
-            if (e.getRootCause() instanceof SQLException) {
-                SQLException sqlEx = (SQLException) e.getRootCause();
-                return new InitResp<>().exc(Integer.parseInt(sqlEx.getSQLState()), sqlEx.getMessage());
-            }
-            return new InitResp<>().exc(1, e.getMessage());
         } catch (Exception e) {
             log.error(e.getMessage());
             return new InitResp<>().exc(1, e.getMessage());
         }
+    }
+
+    // service methods
+
+    @Override
+    public UserEntity getUserEntityById(Long id) {
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Пользователь с таким id не найден"));
     }
 
     @Override
-    public Resp<?> findUserById(Long id) {
-        try {
-            Optional<UserEntity> result = userRepository.findById(id);
-            return new InitResp<>().ok(result);
-        } catch (DataAccessException e) {
-            log.error(e.getMessage());
-            if (e.getRootCause() instanceof SQLException) {
-                SQLException sqlEx = (SQLException) e.getRootCause();
-                return new InitResp<>().exc(Integer.parseInt(sqlEx.getSQLState()), sqlEx.getMessage());
-            }
-            return new InitResp<>().exc(1, e.getMessage());
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
-        }
+    public UserEntity getUserEntityByUpn(String upn) {
+        return repository.findFirstByUpn(upn).orElseThrow(() -> new ResourceNotFoundException("Пользователь с таким uid не найден"));
     }
-
 
 }

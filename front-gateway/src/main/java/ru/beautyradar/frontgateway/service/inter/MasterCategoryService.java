@@ -1,20 +1,27 @@
 package ru.beautyradar.frontgateway.service.inter;
 
 
-import ru.beautyradar.frontgateway.dto.MasterCategoryResponseDTO;
-import ru.beautyradar.frontgateway.dto.UpdateMasterCategoryResponseDTO;
+import org.springframework.transaction.annotation.Transactional;
+import ru.beautyradar.frontgateway.dto.MasterCategoryDto;
 import ru.beautyradar.frontgateway.dto.wrap.Resp;
-import ru.beautyradar.frontgateway.entity.UserEntity;
-import ru.beautyradar.frontgateway.event.SaveClientEvent;
+import ru.beautyradar.frontgateway.entity.MasterCategoryEntity;
 
 public interface MasterCategoryService {
 
-   Resp<?> findByCategoryId(Long id);
 
-   Resp<?> findCategoriesByMasterID(Long id);
+    Resp<?> getAllMasterCategoriesDto();
 
-   void  saveNewMasterCategory(MasterCategoryResponseDTO dto);
+    Resp<?> getMasterCategoryDtoById(Long categoryId);
 
-   String updateMasterCategory(Long id,UpdateMasterCategoryResponseDTO dto);
+    Resp<?> getAllMasterCategoriesByMasterId(Long masterId);
 
+    @Transactional
+    Resp<?> createMasterCategory(MasterCategoryDto masterCategoryDto);
+
+    @Transactional
+    Resp<?> updateMasterCategory(Long id, MasterCategoryDto masterCategoryDto);
+
+    Resp<?> deleteMasterCategoryById(Long id);
+
+    MasterCategoryEntity getMasterCategoryById(Long id);
 }

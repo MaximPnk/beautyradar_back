@@ -5,10 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class MasterCategoryResponseDTO {
-    private String masterCategory;
-    private String description;
-    private Long masterID;
+@AllArgsConstructor
+public class GalleryDto {
+    private Long id;
+    private Long master;
+    private String image;
 }

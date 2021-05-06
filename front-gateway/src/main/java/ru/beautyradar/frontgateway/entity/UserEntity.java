@@ -43,10 +43,10 @@ public class UserEntity {
     @Column(name = "img")
     private String img;
 
-    @OneToOne(mappedBy = "user_id")
+    @OneToOne(mappedBy = "user")
     private ClientEntity client;
 
-    @OneToOne(mappedBy = "user_id")
+    @OneToOne(mappedBy = "user")
     private MasterEntity master;
 
     @Column(name = "created_at")
@@ -63,5 +63,7 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<RoleEntity> userRoles;
 
-
+    public UserEntity(Long id) {
+        this.id = id;
+    }
 }

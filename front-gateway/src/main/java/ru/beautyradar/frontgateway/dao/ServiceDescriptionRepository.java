@@ -11,9 +11,10 @@ import java.util.Optional;
 @Repository
 public interface ServiceDescriptionRepository extends JpaRepository<ServiceDescriptionEntity, Long> {
 
-    Optional<ServiceDescriptionEntity> findById(Long id);
     Optional<ServiceDescriptionEntity> findByMaster(MasterEntity master);
+
     Optional<ServiceDescriptionEntity> findByServiceCategory(ServiceCategoryEntity category);
+
     Optional<ServiceDescriptionEntity> findByPrice(Double price);
 
 }

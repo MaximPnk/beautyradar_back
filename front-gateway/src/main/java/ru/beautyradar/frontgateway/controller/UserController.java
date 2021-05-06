@@ -3,7 +3,6 @@ package ru.beautyradar.frontgateway.controller;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.beautyradar.frontgateway.dto.UserDto;
@@ -21,27 +20,34 @@ import ru.beautyradar.frontgateway.service.inter.UserService;
 @RequestMapping("/user")
 @Slf4j
 public class UserController {
-    @Autowired
-    private UserService userService;
+
+    private final UserService userService;
 
     @ApiOperation(value = "Get user list", httpMethod = "GET", notes = "Получение списка пользователей", response = UserListResponse.class)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
     @GetMapping("/")
-    public ResponseEntity<?> getUsers() {
-        return ResponseEntity.ok(userService.getUsers());
+    public ResponseEntity<?> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsersDto());
+    }
+
+    @ApiOperation(value = "Get user by id", httpMethod = "GET", notes = "Получение пользователя по id", response = UserResponse.class)
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserByUpn(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(userService.getUserDtoById(id));
     }
 
     @ApiOperation(value = "Get user by UID", httpMethod = "GET", notes = "Получение пользователя по UID", response = UserResponse.class)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
-    @GetMapping("/{upn}")
-    public ResponseEntity<?> getUserByUpn(@PathVariable String upn) {
-        return ResponseEntity.ok(userService.getUserByUpn(upn));
+    @GetMapping("/upn/{upn}")
+    public ResponseEntity<?> getUserByUpn(@PathVariable("upn") String upn) {
+        return ResponseEntity.ok(userService.getUserDtoByUpn(upn));
     }
 
     @ApiOperation(value = "Exists user by UID", httpMethod = "GET", notes = "Существует ли пользователь по UID", response = BooleanResponse.class)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
     @GetMapping("/{upn}/exists")
-    public ResponseEntity<?> existsUserByUpn(@PathVariable String upn) {
+    public ResponseEntity<?> existsUserByUpn(@PathVariable("upn") String upn) {
         return ResponseEntity.ok(userService.existsUserByUpn(upn));
     }
 
@@ -54,16 +60,16 @@ public class UserController {
 
     @ApiOperation(value = "Update user", httpMethod = "PUT", notes = "Изменение пользователя", response = UserResponse.class)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
-    @PutMapping("/")
-    public ResponseEntity<?> updateUserByUpn(@RequestBody UserDto userDto) {
-        return ResponseEntity.ok(userService.updateUser(userDto));
+    @PutMapping("/{userId}")
+    public ResponseEntity<?> updateUserByUpn(@PathVariable("userId") Long userId, @RequestBody UserDto userDto) {
+        return ResponseEntity.ok(userService.updateUser(userId, userDto));
     }
 
-    @ApiOperation(value = "Delete user by UID", httpMethod = "DELETE", notes = "Удаление пользователя", response = Resp.class)
+    @ApiOperation(value = "Delete user by id", httpMethod = "DELETE", notes = "Удаление пользователя", response = Resp.class)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
-    @DeleteMapping("/{upn}")
-    public ResponseEntity<?> deleteUserByUpn(@PathVariable String upn) {
-        return ResponseEntity.ok(userService.deleteUserByUpn(upn));
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> deleteUserByUpn(@PathVariable("userId") Long id) {
+        return ResponseEntity.ok(userService.deleteUserById(id));
     }
 
 }

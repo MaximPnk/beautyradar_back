@@ -6,17 +6,21 @@ import ru.beautyradar.frontgateway.entity.UserEntity;
 
 public interface UserService {
 
-    Resp<?> getUsers();
+    Resp<?> getAllUsersDto();
 
-    Resp<?> getUserByUpn(String upn);
+    Resp<?> getUserDtoById(Long id);
+
+    Resp<?> getUserDtoByUpn(String upn);
 
     Resp<?> existsUserByUpn(String upn);
 
     Resp<?> saveUser(UserDto userDto);
 
-    Resp<?> updateUser(UserDto userDto);
+    Resp<?> updateUser(Long id, UserDto userDto);
 
-    Resp<?> deleteUserByUpn(String upn);
+    Resp<?> deleteUserById(Long id);
 
-    Resp<?> findUserById(Long id);
+    UserEntity getUserEntityById(Long id);
+
+    UserEntity getUserEntityByUpn(String upn);
 }

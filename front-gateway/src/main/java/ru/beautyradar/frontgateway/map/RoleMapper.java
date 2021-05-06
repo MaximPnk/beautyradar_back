@@ -1,14 +1,10 @@
 package ru.beautyradar.frontgateway.map;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.beautyradar.frontgateway.dto.RoleDto;
-import ru.beautyradar.frontgateway.dto.UserDto;
 import ru.beautyradar.frontgateway.entity.RoleEntity;
-import ru.beautyradar.frontgateway.entity.UserEntity;
 
 @Component
-@RequiredArgsConstructor
 public class RoleMapper {
 
 

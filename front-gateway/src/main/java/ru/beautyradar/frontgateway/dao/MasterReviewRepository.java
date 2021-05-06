@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface MasterReviewRepository extends JpaRepository<MasterReviewEntity, Long> {
 
-   List<MasterReviewEntity> findAll();
    List<MasterReviewEntity> findAllByMaster(MasterEntity master);
+
    List<MasterReviewEntity> findAllByClient(ClientEntity client);
 }

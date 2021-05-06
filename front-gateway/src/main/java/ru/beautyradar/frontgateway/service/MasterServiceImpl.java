@@ -3,133 +3,50 @@ package ru.beautyradar.frontgateway.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.beautyradar.frontgateway.dao.MasterRepository;
 import ru.beautyradar.frontgateway.dto.MasterDto;
 import ru.beautyradar.frontgateway.dto.wrap.InitResp;
 import ru.beautyradar.frontgateway.dto.wrap.Resp;
+import ru.beautyradar.frontgateway.entity.MasterCategoryEntity;
 import ru.beautyradar.frontgateway.entity.MasterEntity;
 import ru.beautyradar.frontgateway.entity.UserEntity;
 import ru.beautyradar.frontgateway.exc.ResourceNotFoundException;
 import ru.beautyradar.frontgateway.map.MasterMapper;
+import ru.beautyradar.frontgateway.service.inter.MasterCategoryService;
 import ru.beautyradar.frontgateway.service.inter.MasterService;
 import ru.beautyradar.frontgateway.service.inter.UserService;
 
-import java.sql.SQLException;
-import java.util.Optional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class MasterServiceImpl implements MasterService {
 
-    @Autowired
-    MasterRepository repository;
-    @Autowired
-    MasterMapper mapper;
-    @Autowired
-    UserService userService;
-
+    private final MasterRepository repository;
+    private final MasterMapper mapper;
+    private final UserService userService;
+    private MasterCategoryService masterCategoryService;
 
     @Override
-    public Resp<?> getMasters() {
+    public Resp<?> getAllMastersDto() {
         try {
-            return new InitResp<>().ok(repository.findAll());
-        } catch (DataAccessException e) {
-            log.error(e.getMessage());
-            if (e.getRootCause() instanceof SQLException) {
-                SQLException sqlEx = (SQLException) e.getRootCause();
-                return new InitResp<>().exc(Integer.parseInt(sqlEx.getSQLState()), sqlEx.getMessage());
-            }
-            return new InitResp<>().exc(1, e.getMessage());
+            return new InitResp<>().ok(repository.findAll().stream().map(mapper::mapEntityToDto));
         } catch (Exception e) {
             log.error(e.getMessage());
             return new InitResp<>().exc(1, e.getMessage());
         }
-    }
-
-    @Override
-    public Resp<?> getMasterById(Long id) {
-        try {
-            return new InitResp<>().ok(repository.findById(id));
-        } catch (DataAccessException e) {
-            log.error(e.getMessage());
-            if (e.getRootCause() instanceof SQLException) {
-                SQLException sqlEx = (SQLException) e.getRootCause();
-                return new InitResp<>().exc(Integer.parseInt(sqlEx.getSQLState()), sqlEx.getMessage());
-            }
-            return new InitResp<>().exc(1, e.getMessage());
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
-        }
-    }
-
-    @Override
-    public MasterEntity getMasterEntityById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No such master by id"));
-    }
-
-    @Override
-    public MasterDto getMasterInfoByUserId(Long id) {
-        MasterDto dto = new MasterDto();
-        Resp<?> resp =  userService.findUserById(id);
-        if (resp.getCode()!=0) {
-            UserEntity user = (UserEntity) resp.getBody();//todo - может быть не придвиденная ошибка
-            dto.setId(user.getMaster().getId());
-            dto.setUserId(user.getId());
-            dto.setAddress(user.getMaster().getAddress());
-            dto.setRating(user.getMaster().getRating());
-        }
-        return dto;
     }
 
     @Override
     @Transactional
-    public Resp<?> setMasterByUserId(Long userId) {
+    public Resp<?> getAllMastersDtoByMasterCategoryId(Long id) {
         try {
-            MasterDto dto = getMasterInfoByUserId(userId);
-            if (dto.getUserId().equals(userId)) {
-                return new InitResp<>().ok(dto);
-            } else {
-                MasterEntity master = new MasterEntity();
-                repository.saveAndFlush(master);
-                return new InitResp<>().ok(getMasterInfoByUserId(userId));
-            }
-        } catch (DataAccessException e) {
-            log.error(e.getMessage());
-            if (e.getRootCause() instanceof SQLException) {
-                SQLException sqlEx = (SQLException) e.getRootCause();
-                return new InitResp<>().exc(Integer.parseInt(sqlEx.getSQLState()), sqlEx.getMessage());
-            }
-            return new InitResp<>().exc(1, e.getMessage());
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
-        }
-
-
-    }
-
-    @Override
-    public Resp<?> setAddressByMasterId(Long masterId, String address) {
-        try {
-            Optional<MasterEntity> master = repository.findById(masterId);
-            if (master.isPresent()) {
-                master.get().setAddress(address);
-                return new InitResp<>().ok(repository.findById(masterId));
-            } else {
-                return new InitResp<>().ok("Updating address rejected by reason - No such master ID");
-            }
-        } catch (DataAccessException e) {
-            log.error(e.getMessage());
-            if (e.getRootCause() instanceof SQLException) {
-                SQLException sqlEx = (SQLException) e.getRootCause();
-                return new InitResp<>().exc(Integer.parseInt(sqlEx.getSQLState()), sqlEx.getMessage());
-            }
-            return new InitResp<>().exc(1, e.getMessage());
+            MasterCategoryEntity masterCategoryEntity = masterCategoryService.getMasterCategoryById(id);
+            List<MasterEntity> masterEntities = repository.findMasterEntitiesByMasterCategories(masterCategoryEntity);
+            return new InitResp<>().ok(masterEntities.stream().map(mapper::mapEntityToDto));
         } catch (Exception e) {
             log.error(e.getMessage());
             return new InitResp<>().exc(1, e.getMessage());
@@ -137,27 +54,106 @@ public class MasterServiceImpl implements MasterService {
     }
 
     @Override
-    public Resp<?> setCoordinatesByMasterId(Long masterId, String coordinates) {
+    public Resp<?> getMasterDtoById(Long id) {
         try {
-            Optional<MasterEntity> master = repository.findById(masterId);
-            if (master.isPresent()) {
-                master.get().setCoordinates(coordinates);
-                return new InitResp<>().ok(repository.findById(masterId));
-            } else {
-                return new InitResp<>().ok("Updating coordinates rejected by reason - No such master ID");
-            }
-        } catch (DataAccessException e) {
-            log.error(e.getMessage());
-            if (e.getRootCause() instanceof SQLException) {
-                SQLException sqlEx = (SQLException) e.getRootCause();
-                return new InitResp<>().exc(Integer.parseInt(sqlEx.getSQLState()), sqlEx.getMessage());
-            }
-            return new InitResp<>().exc(1, e.getMessage());
+            return new InitResp<>().ok(mapper.mapEntityToDto(getMasterEntityById(id)));
         } catch (Exception e) {
             log.error(e.getMessage());
             return new InitResp<>().exc(1, e.getMessage());
         }
     }
 
+    @Override
+    @Transactional
+    public Resp<?> getMasterDtoByUserId(Long id) {
+        try {
+            UserEntity user = userService.getUserEntityById(id);
+            MasterEntity masterEntity = getMasterEntityByUser(user);
+            return new InitResp<>().ok(mapper.mapEntityToDto(masterEntity));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new InitResp<>().exc(1, e.getMessage());
+        }
+    }
 
+    @Override
+    public Resp<?> createMaster(MasterDto masterDto) {
+        try {
+            MasterEntity master = repository.save(mapper.mapDtoToEntity(masterDto));
+            return new InitResp<>().ok(mapper.mapEntityToDto(master));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new InitResp<>().exc(1, e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public Resp<?> updateMaster(Long id, MasterDto masterDto) {
+        try {
+            MasterEntity masterEntity = getMasterEntityById(id);
+            mapper.updateEntityByDto(masterEntity, masterDto);
+            return new InitResp<>().ok(mapper.mapEntityToDto(masterEntity));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new InitResp<>().exc(1, e.getMessage());
+        }
+    }
+
+    @Override
+    public Resp<?> deleteMasterById(Long id) {
+        try {
+            repository.deleteById(id);
+            return new InitResp<>().ok(null);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new InitResp<>().exc(1, e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public Resp<?> addMasterCategory(Long masterId, Long masterCategoryId) {
+        try {
+            MasterCategoryEntity masterCategoryEntity = masterCategoryService.getMasterCategoryById(masterCategoryId);
+            MasterEntity masterEntity = getMasterEntityById(masterId);
+            masterEntity.getMasterCategories().add(masterCategoryEntity);
+            return new InitResp<>().ok(mapper.mapEntityToDto(masterEntity));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new InitResp<>().exc(1, e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public Resp<?> removeMasterCategory(Long masterId, Long masterCategoryId) {
+        try {
+            MasterCategoryEntity masterCategoryEntity = masterCategoryService.getMasterCategoryById(masterCategoryId);
+            MasterEntity masterEntity = getMasterEntityById(masterId);
+            masterEntity.getMasterCategories().remove(masterCategoryEntity);
+            return new InitResp<>().ok(mapper.mapEntityToDto(masterEntity));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new InitResp<>().exc(1, e.getMessage());
+        }
+    }
+
+    //service methods
+    @Override
+    public MasterEntity getMasterEntityById(Long id) {
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Мастер с таким id не найден"));
+    }
+
+    @Override
+    public MasterEntity getMasterEntityByUser(UserEntity userEntity) {
+        return repository.findFirstByUser(userEntity).orElseThrow(() -> new ResourceNotFoundException("Пользователь не является мастером"));
+    }
+
+    //cyclic
+
+    @Autowired
+    public void setMasterCategoryService(MasterCategoryService masterCategoryService) {
+        this.masterCategoryService = masterCategoryService;
+    }
 }
