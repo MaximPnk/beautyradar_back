@@ -17,11 +17,11 @@ public class ServiceDescriptionEntity {
     @Column(name = "service_description_id")
     private Long id;
 
-    @OneToOne (cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "master_id")
     private MasterEntity master;
 
-    @OneToOne (cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "service_category_id")
     private ServiceCategoryEntity serviceCategory;
 

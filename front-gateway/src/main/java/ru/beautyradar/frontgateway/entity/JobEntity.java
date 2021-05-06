@@ -22,19 +22,19 @@ public class JobEntity {
     @Column(name = "job_id")
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "master_workday_id")
     private MasterWorkDayEntity masterWorkDay;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "client_id")
     private ClientEntity client;
 
-    @OneToOne (cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "service_description_id")
     private ServiceDescriptionEntity serviceDescription;
 
-    @OneToOne (cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "job_status_id")
     private JobStatusEntity jobStatus;
 

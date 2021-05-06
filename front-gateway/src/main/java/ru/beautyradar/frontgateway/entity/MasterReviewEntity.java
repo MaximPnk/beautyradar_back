@@ -22,11 +22,11 @@ public class MasterReviewEntity {
     @Column(name = "master_review_id")
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "master_id")
     private MasterEntity master;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "client_id")
     private ClientEntity client;
 

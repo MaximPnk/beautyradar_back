@@ -22,7 +22,7 @@ public class MasterEntity {
     @Column(name = "master_id")
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
@@ -33,7 +33,7 @@ public class MasterEntity {
     private String coordinates;
 
     @Column(name = "rating")
-    private Integer rating;
+    private Double rating;
 
     @Column(name = "created_at")
     @CreationTimestamp
@@ -54,5 +54,11 @@ public class MasterEntity {
             joinColumns = @JoinColumn(name = "master_id"),
             inverseJoinColumns = @JoinColumn(name = "master_category_id"))
     private List<MasterCategoryEntity> masterCategories;
+
+    @ManyToMany
+    @JoinTable(name = "client_review",
+            joinColumns = @JoinColumn(name = "master_id"),
+            inverseJoinColumns = @JoinColumn(name = "client_review_id"))
+    private List<ClientReviewEntity> clientReviews;
 
 }

@@ -43,6 +43,12 @@ public class ClientEntity {
             inverseJoinColumns = @JoinColumn(name = "master_id"))
     private List<MasterEntity> favoriteMasters;
 
+    @ManyToMany
+    @JoinTable(name = "master_review",
+            joinColumns = @JoinColumn(name = "client_id"),
+            inverseJoinColumns = @JoinColumn(name = "master_review_id"))
+    private List<MasterReviewEntity> masterReviews;
+
     public ClientEntity(UserEntity user) {
         this.user = user;
     }

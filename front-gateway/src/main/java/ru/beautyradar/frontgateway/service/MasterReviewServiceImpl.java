@@ -2,6 +2,7 @@ package ru.beautyradar.frontgateway.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.beautyradar.frontgateway.dao.MasterReviewRepository;
@@ -11,6 +12,8 @@ import ru.beautyradar.frontgateway.dto.wrap.RespBuilder;
 import ru.beautyradar.frontgateway.entity.ClientEntity;
 import ru.beautyradar.frontgateway.entity.MasterReviewEntity;
 import ru.beautyradar.frontgateway.entity.MasterEntity;
+import ru.beautyradar.frontgateway.event.UpdateClientRatingEvent;
+import ru.beautyradar.frontgateway.event.UpdateMasterRatingEvent;
 import ru.beautyradar.frontgateway.exc.ResourceNotFoundException;
 import ru.beautyradar.frontgateway.map.MasterReviewMapper;
 import ru.beautyradar.frontgateway.service.inter.MasterReviewService;
@@ -28,6 +31,7 @@ public class MasterReviewServiceImpl implements MasterReviewService {
     private final MasterService masterService;
     private final MasterReviewRepository repository;
     private final MasterReviewMapper mapper;
+    private final ApplicationEventPublisher publisher;
 
     @Override
     @Transactional
@@ -72,7 +76,8 @@ public class MasterReviewServiceImpl implements MasterReviewService {
     public Resp<?> createMasterReview(MasterReviewDto masterReviewDto) {
         try {
             MasterReviewEntity masterReviewEntity = mapper.mapDtoToEntity(masterReviewDto);
-            repository.save(masterReviewEntity);            
+            repository.save(masterReviewEntity);
+            publisher.publishEvent(new UpdateClientRatingEvent(ClientServiceImpl.class, masterReviewEntity.getClient()));
             return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(masterReviewEntity)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -86,6 +91,7 @@ public class MasterReviewServiceImpl implements MasterReviewService {
         try {
             MasterReviewEntity masterReviewEntity = getMasterReviewEntityById(id);
             mapper.updateEntityByDto(masterReviewEntity, masterReviewDto);
+            publisher.publishEvent(new UpdateClientRatingEvent(ClientServiceImpl.class, masterReviewEntity.getClient()));
             return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(masterReviewEntity)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -97,7 +103,11 @@ public class MasterReviewServiceImpl implements MasterReviewService {
     @Transactional
     public Resp<?> deleteMasterReviewById(Long id) {
         try {
-            repository.deleteById(id);
+            MasterReviewEntity masterReviewEntity = getMasterReviewEntityById(id);
+            ClientEntity client = masterReviewEntity.getClient();
+            repository.delete(masterReviewEntity);
+            repository.flush();
+            publisher.publishEvent(new UpdateClientRatingEvent(ClientServiceImpl.class, client));
             return new RespBuilder<>().setCode(0).build();
         } catch (Exception e) {
             log.error(e.getMessage());

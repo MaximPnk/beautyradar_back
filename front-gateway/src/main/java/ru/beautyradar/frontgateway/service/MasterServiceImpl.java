@@ -4,15 +4,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.beautyradar.frontgateway.dao.MasterRepository;
 import ru.beautyradar.frontgateway.dto.MasterDto;
 import ru.beautyradar.frontgateway.dto.wrap.Resp;
 import ru.beautyradar.frontgateway.dto.wrap.RespBuilder;
-import ru.beautyradar.frontgateway.entity.MasterCategoryEntity;
-import ru.beautyradar.frontgateway.entity.MasterEntity;
-import ru.beautyradar.frontgateway.entity.UserEntity;
+import ru.beautyradar.frontgateway.entity.*;
+import ru.beautyradar.frontgateway.event.UpdateClientRatingEvent;
+import ru.beautyradar.frontgateway.event.UpdateMasterRatingEvent;
 import ru.beautyradar.frontgateway.exc.ResourceNotFoundException;
 import ru.beautyradar.frontgateway.map.MasterMapper;
 import ru.beautyradar.frontgateway.service.inter.MasterCategoryService;
@@ -20,6 +21,7 @@ import ru.beautyradar.frontgateway.service.inter.MasterService;
 import ru.beautyradar.frontgateway.service.inter.UserService;
 
 import java.util.List;
+import java.util.OptionalDouble;
 
 @Service
 @RequiredArgsConstructor
@@ -140,7 +142,23 @@ public class MasterServiceImpl implements MasterService {
         }
     }
 
+    //event listener
+
+    @Override
+    @EventListener
+    @Transactional
+    public void updateRating(UpdateMasterRatingEvent event) {
+        MasterEntity master = event.getMasterEntity();
+        OptionalDouble rating = master.getClientReviews().stream().mapToInt(ClientReviewEntity::getRating).average();
+        if (rating.isPresent()) {
+            master.setRating(rating.getAsDouble());
+        } else {
+            master.setRating(null);
+        }
+    }
+
     //service methods
+
     @Override
     public MasterEntity getMasterEntityById(Long id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Мастер с таким id не найден"));
