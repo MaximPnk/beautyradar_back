@@ -13,5 +13,6 @@ public class MasterDto {
     private Long userId;
     private String address;
     private Double rating;
+    private String coordinates;
 
 }
