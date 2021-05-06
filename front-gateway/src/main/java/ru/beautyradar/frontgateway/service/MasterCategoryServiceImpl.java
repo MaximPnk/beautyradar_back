@@ -25,7 +25,7 @@ public class MasterCategoryServiceImpl implements MasterCategoryService {
 
     private final MasterCategoryRepository repository;
     private final MasterCategoryMapper mapper;
-    private final MasterService masterService;
+    private MasterService masterService;
 
     @Override
     public Resp<?> getAllMasterCategoriesDto() {
@@ -102,5 +102,10 @@ public class MasterCategoryServiceImpl implements MasterCategoryService {
     @Override
     public MasterCategoryEntity getMasterCategoryById(Long id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Категория с таким ID не существует"));
+    }
+
+    @Autowired
+    public void setMasterService(MasterService masterService) {
+        this.masterService = masterService;
     }
 }

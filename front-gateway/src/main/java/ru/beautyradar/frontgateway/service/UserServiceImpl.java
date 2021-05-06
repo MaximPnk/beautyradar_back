@@ -2,6 +2,7 @@ package ru.beautyradar.frontgateway.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import ru.beautyradar.frontgateway.dao.UserRepository;
@@ -24,8 +25,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
     private final UserMapper mapper;
-    private final ClientService clientService;
     private final ApplicationEventPublisher publisher;
+    private ClientService clientService;
 
     @Override
     public Resp<?> getAllUsersDto() {
@@ -119,4 +120,8 @@ public class UserServiceImpl implements UserService {
         return repository.findFirstByUpn(upn).orElseThrow(() -> new ResourceNotFoundException("Пользователь с таким uid не найден"));
     }
 
+    @Autowired
+    public void setClientService(ClientService clientService) {
+        this.clientService = clientService;
+    }
 }

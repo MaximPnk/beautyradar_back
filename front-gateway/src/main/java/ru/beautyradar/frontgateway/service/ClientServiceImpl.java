@@ -3,6 +3,7 @@ package ru.beautyradar.frontgateway.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,6 +82,7 @@ public class ClientServiceImpl implements ClientService {
 
     //cyclic
 
+    @Lazy
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
