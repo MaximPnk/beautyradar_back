@@ -11,8 +11,8 @@ import ru.beautyradar.uploadservice.exc.ResourceNotFoundException;
 import ru.beautyradar.uploadservice.service.inter.FileService;
 import ru.beautyradar.uploadservice.service.inter.GalleryService;
 import ru.beautyradar.uploadservice.service.inter.MasterService;
-import ru.beautyradar.uploadservice.wrap.InitResp;
 import ru.beautyradar.uploadservice.wrap.Resp;
+import ru.beautyradar.uploadservice.wrap.RespBuilder;
 
 import javax.transaction.Transactional;
 
@@ -32,10 +32,10 @@ public class GalleryServiceImpl implements GalleryService {
             MasterEntity master = masterService.findMasterById(masterId);
             String url = fileService.upload(multipartFile);
             galleryRepository.save(new GalleryEntity(master, url));
-            return new InitResp<>().ok(url);
+            return new RespBuilder<>().setCode(0).setBody(url).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -46,10 +46,10 @@ public class GalleryServiceImpl implements GalleryService {
             GalleryEntity entity = getGalleryById(galleryId);
             fileService.delete(entity.getImage());
             galleryRepository.delete(entity);
-            return new InitResp<>().ok(null);
+            return new RespBuilder<>().setCode(0).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 

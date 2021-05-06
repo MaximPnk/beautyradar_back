@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.beautyradar.frontgateway.dao.MasterRepository;
 import ru.beautyradar.frontgateway.dto.MasterDto;
-import ru.beautyradar.frontgateway.dto.wrap.InitResp;
 import ru.beautyradar.frontgateway.dto.wrap.Resp;
+import ru.beautyradar.frontgateway.dto.wrap.RespBuilder;
 import ru.beautyradar.frontgateway.entity.MasterCategoryEntity;
 import ru.beautyradar.frontgateway.entity.MasterEntity;
 import ru.beautyradar.frontgateway.entity.UserEntity;
@@ -34,10 +34,10 @@ public class MasterServiceImpl implements MasterService {
     @Override
     public Resp<?> getAllMastersDto() {
         try {
-            return new InitResp<>().ok(repository.findAll().stream().map(mapper::mapEntityToDto));
+            return new RespBuilder<>().setCode(0).setBody(repository.findAll().stream().map(mapper::mapEntityToDto)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -47,20 +47,20 @@ public class MasterServiceImpl implements MasterService {
         try {
             MasterCategoryEntity masterCategoryEntity = masterCategoryService.getMasterCategoryById(id);
             List<MasterEntity> masterEntities = repository.findMasterEntitiesByMasterCategories(masterCategoryEntity);
-            return new InitResp<>().ok(masterEntities.stream().map(mapper::mapEntityToDto));
+            return new RespBuilder<>().setCode(0).setBody(masterEntities.stream().map(mapper::mapEntityToDto)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
     @Override
     public Resp<?> getMasterDtoById(Long id) {
         try {
-            return new InitResp<>().ok(mapper.mapEntityToDto(getMasterEntityById(id)));
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(getMasterEntityById(id))).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -70,10 +70,10 @@ public class MasterServiceImpl implements MasterService {
         try {
             UserEntity user = userService.getUserEntityById(id);
             MasterEntity masterEntity = getMasterEntityByUser(user);
-            return new InitResp<>().ok(mapper.mapEntityToDto(masterEntity));
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(masterEntity)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -81,10 +81,10 @@ public class MasterServiceImpl implements MasterService {
     public Resp<?> createMaster(MasterDto masterDto) {
         try {
             MasterEntity master = repository.save(mapper.mapDtoToEntity(masterDto));
-            return new InitResp<>().ok(mapper.mapEntityToDto(master));
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(master)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -94,10 +94,10 @@ public class MasterServiceImpl implements MasterService {
         try {
             MasterEntity masterEntity = getMasterEntityById(id);
             mapper.updateEntityByDto(masterEntity, masterDto);
-            return new InitResp<>().ok(mapper.mapEntityToDto(masterEntity));
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(masterEntity)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -105,10 +105,10 @@ public class MasterServiceImpl implements MasterService {
     public Resp<?> deleteMasterById(Long id) {
         try {
             repository.deleteById(id);
-            return new InitResp<>().ok(null);
+            return new RespBuilder<>().setCode(0).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -119,10 +119,10 @@ public class MasterServiceImpl implements MasterService {
             MasterCategoryEntity masterCategoryEntity = masterCategoryService.getMasterCategoryById(masterCategoryId);
             MasterEntity masterEntity = getMasterEntityById(masterId);
             masterEntity.getMasterCategories().add(masterCategoryEntity);
-            return new InitResp<>().ok(mapper.mapEntityToDto(masterEntity));
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(masterEntity)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -133,10 +133,10 @@ public class MasterServiceImpl implements MasterService {
             MasterCategoryEntity masterCategoryEntity = masterCategoryService.getMasterCategoryById(masterCategoryId);
             MasterEntity masterEntity = getMasterEntityById(masterId);
             masterEntity.getMasterCategories().remove(masterCategoryEntity);
-            return new InitResp<>().ok(mapper.mapEntityToDto(masterEntity));
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(masterEntity)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 

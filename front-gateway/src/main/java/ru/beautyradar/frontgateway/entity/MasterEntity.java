@@ -47,7 +47,7 @@ public class MasterEntity {
     @JoinTable(name = "favorite",
             joinColumns = @JoinColumn(name = "master_id"),
             inverseJoinColumns = @JoinColumn(name = "client_id"))
-    private List<ClientEntity> favoriteClients; // todo - выпилить
+    private List<ClientEntity> favoriteClients;
 
     @ManyToMany
     @JoinTable(name = "master_categories",

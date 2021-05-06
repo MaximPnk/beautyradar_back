@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.beautyradar.frontgateway.dao.MasterCategoryRepository;
 import ru.beautyradar.frontgateway.dto.MasterCategoryDto;
-import ru.beautyradar.frontgateway.dto.wrap.InitResp;
 import ru.beautyradar.frontgateway.dto.wrap.Resp;
+import ru.beautyradar.frontgateway.dto.wrap.RespBuilder;
 import ru.beautyradar.frontgateway.entity.MasterCategoryEntity;
 import ru.beautyradar.frontgateway.entity.MasterEntity;
 import ru.beautyradar.frontgateway.exc.ResourceNotFoundException;
@@ -31,10 +31,10 @@ public class MasterCategoryServiceImpl implements MasterCategoryService {
     public Resp<?> getAllMasterCategoriesDto() {
         try {
             List<MasterCategoryEntity> entities = repository.findAll();
-            return new InitResp<>().ok(entities.stream().map(mapper::mapEntityToDto));
+            return new RespBuilder<>().setCode(0).setBody(entities.stream().map(mapper::mapEntityToDto)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -42,10 +42,10 @@ public class MasterCategoryServiceImpl implements MasterCategoryService {
     public Resp<?> getMasterCategoryDtoById(Long categoryId) {
         try {
             MasterCategoryEntity entity = getMasterCategoryById(categoryId);
-            return new InitResp<>().ok(mapper.mapEntityToDto(entity));
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(entity)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -54,10 +54,10 @@ public class MasterCategoryServiceImpl implements MasterCategoryService {
         try {
             MasterEntity master = masterService.getMasterEntityById(masterId);
             List<MasterCategoryEntity> masterCategories = repository.findAllByMaster(master);
-            return new InitResp<>().ok(masterCategories.stream().map(mapper::mapEntityToDto));
+            return new RespBuilder<>().setCode(0).setBody(masterCategories.stream().map(mapper::mapEntityToDto)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -66,10 +66,10 @@ public class MasterCategoryServiceImpl implements MasterCategoryService {
     public Resp<?> createMasterCategory(MasterCategoryDto masterCategoryDto) {
         try {
             MasterCategoryEntity entity = repository.save(mapper.mapDtoToEntity(masterCategoryDto));
-            return new InitResp<>().ok(mapper.mapEntityToDto(entity));
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(entity)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -79,10 +79,10 @@ public class MasterCategoryServiceImpl implements MasterCategoryService {
         try {
             MasterCategoryEntity entity = getMasterCategoryById(id);
             mapper.updateEntityByDto(entity, masterCategoryDto);
-            return new InitResp<>().ok(mapper.mapEntityToDto(entity));
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(entity)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -90,10 +90,10 @@ public class MasterCategoryServiceImpl implements MasterCategoryService {
     public Resp<?> deleteMasterCategoryById(Long id) {
         try {
             repository.deleteById(id);
-            return new InitResp<>().ok(null);
+            return new RespBuilder<>().setCode(0).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
