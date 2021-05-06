@@ -2,8 +2,6 @@ package ru.beautyradar.frontgateway.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +23,7 @@ public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository repository;
     private final ClientMapper mapper;
-    private UserService userService;
+    private final UserService userService;
 
     @Override
     public Resp<?> getAllClientsDto() {
@@ -82,11 +80,4 @@ public class ClientServiceImpl implements ClientService {
         return repository.findByUser(userEntity).orElseThrow(() -> new ResourceNotFoundException("Пользователь не является клиентом"));
     }
 
-    //cyclic
-
-    @Lazy
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
 }
