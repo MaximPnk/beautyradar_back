@@ -4,7 +4,7 @@ import ru.beautyradar.frontgateway.dto.wrap.Resp;
 
 public interface FavoriteService {
 
-    Resp<?> getAllFavoriteMastersByClientId(Long id);
+    Resp<?> getAllFavoriteMastersDtoByClientId(Long id);
 
     Resp<?> addFavoriteMaster(Long clientId, Long masterId);
 

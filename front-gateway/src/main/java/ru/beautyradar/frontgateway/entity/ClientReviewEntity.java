@@ -30,7 +30,7 @@ public class ClientReviewEntity {
     private MasterEntity master;
 
     @Column(name="rating")
-    private Double rating;
+    private Integer rating;
 
     @Column(name="description")
     private String description;

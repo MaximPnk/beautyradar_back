@@ -7,12 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MasterDto {
-
-    private Long id;
-    private Long userId;
-    private String address;
-    private Integer rating;
-    private String coordinates;
-
+public class MasterReviewDto {
+    Long id;
+    Long masterId;
+    Long clientId;
+    Integer rating;
+    String description;
 }
