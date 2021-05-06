@@ -1,8 +1,8 @@
 package ru.beautyradar.uploadservice.service.inter;
 
-import ru.beautyradar.uploadservice.wrap.Resp;
+import ru.beautyradar.uploadservice.entity.MasterEntity;
 
 public interface MasterService {
 
-    Resp<?> findMasterById(Long id);
+    MasterEntity findMasterById(Long id);
 }

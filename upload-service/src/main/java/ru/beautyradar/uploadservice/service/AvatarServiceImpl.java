@@ -25,29 +25,9 @@ public class AvatarServiceImpl implements AvatarService {
     @Transactional
     public Resp<?> updateUserAvatar(Long userId, MultipartFile multipartFile) {
         try {
-
-            Resp<?> userResp = userService.findUserById(userId);
-            if (userResp.getCode() != 0) {
-                return userResp;
-            }
-            UserEntity user = (UserEntity) userResp.getBody();
-            if (user == null) {
-                return new InitResp<>().exc(1, "User not found");
-            }
-
-            if (user.getImg() != null) {
-                Resp<?> deleteResp = fileService.delete(user.getImg());
-                if (deleteResp.getCode() != 0) {
-                    return deleteResp;
-                }
-            }
-
-            Resp<?> uploadResp = fileService.upload(multipartFile);
-            String url = uploadResp.getBody().toString();
-            if (uploadResp.getCode() != 0) {
-                return uploadResp;
-            }
-
+            UserEntity user = userService.findUserById(userId);
+            fileService.delete(user.getImg());
+            String url = fileService.upload(multipartFile);
             user.setImg(url);
             return new InitResp<>().ok(url);
         } catch (Exception e) {
@@ -60,22 +40,9 @@ public class AvatarServiceImpl implements AvatarService {
     @Transactional
     public Resp<?> delete(Long userId) {
         try {
-
-            Resp<?> userResp = userService.findUserById(userId);
-            if (userResp.getCode() != 0) {
-                return userResp;
-            }
-            UserEntity user = (UserEntity) userResp.getBody();
-            if (user == null) {
-                return new InitResp<>().exc(1, "User not found");
-            }
-
+            UserEntity user = userService.findUserById(userId);
             user.setImg(null);
-            Resp<?> deleteResp = fileService.delete(user.getImg());
-            if (deleteResp.getCode() != 0) {
-                return deleteResp;
-            }
-
+            fileService.delete(user.getImg());
             return new InitResp<>().ok(null);
         } catch (Exception e) {
             log.info(e.getMessage());

@@ -26,7 +26,6 @@ public class ClientServiceImpl implements ClientService {
     private final ClientMapper mapper;
     private UserService userService;
 
-
     @Override
     public Resp<?> getAllClientsDto() {
         try {
@@ -39,7 +38,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Resp<?> getClientDtoById(Long id) {
-        try{
+        try {
             ClientEntity clientEntity = getClientEntityById(id);
             return new InitResp<>().ok(mapper.mapEntityToDto(clientEntity));
         } catch (Exception e) {
@@ -52,7 +51,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     @Transactional
     public Resp<?> getClientDtoByUserId(Long id) {
-        try{
+        try {
             UserEntity userEntity = userService.getUserEntityById(id);
             ClientEntity clientEntity = getClientEntityByUser(userEntity);
             return new InitResp<>().ok(mapper.mapEntityToDto(clientEntity));

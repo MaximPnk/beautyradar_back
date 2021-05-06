@@ -5,5 +5,5 @@ import ru.beautyradar.pushservice.model.PrivatePush;
 
 public interface PushService {
 
-    Resp<?> send(PrivatePush privatePush, String token);
+    Resp<?> send(PrivatePush privatePush);
 }

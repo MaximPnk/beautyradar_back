@@ -8,11 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.beautyradar.pushservice.dto.wrap.Resp;
 import ru.beautyradar.pushservice.dto.wrap.swagger.StringResponse;
 import ru.beautyradar.pushservice.model.PrivatePush;
 import ru.beautyradar.pushservice.service.inter.PushService;
-import ru.beautyradar.pushservice.service.inter.UserService;
 
 @Api(value = "FirebaseController", tags = {"Firebase"})
 @SwaggerDefinition(tags = {@Tag(name = "Firebase Controller", description = "Контроллер push-уведомлений")})
@@ -23,16 +21,12 @@ import ru.beautyradar.pushservice.service.inter.UserService;
 public class PushController {
 
     private final PushService pushService;
-    private final UserService userService;
 
     @ApiOperation(value = "Push", httpMethod = "POST", notes = "Отправка личного push-уведомления", response = StringResponse.class)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
     @PostMapping("/")
     public ResponseEntity<?> sendMessage(@RequestBody PrivatePush privatePush) {
-        Resp<?> tokenResponse = userService.getTokenById(privatePush.getUserId());
-        if (tokenResponse.getCode() != 0) {
-            return ResponseEntity.ok(tokenResponse);
-        }
-        return ResponseEntity.ok(pushService.send(privatePush, tokenResponse.getBody().toString()));
+        return ResponseEntity.ok(pushService.send(privatePush));
     }
+
 }

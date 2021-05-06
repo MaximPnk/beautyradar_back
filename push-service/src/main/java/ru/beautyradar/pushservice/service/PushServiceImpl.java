@@ -8,6 +8,7 @@ import ru.beautyradar.pushservice.dto.wrap.InitResp;
 import ru.beautyradar.pushservice.dto.wrap.Resp;
 import ru.beautyradar.pushservice.model.PrivatePush;
 import ru.beautyradar.pushservice.service.inter.PushService;
+import ru.beautyradar.pushservice.service.inter.UserService;
 
 @Service
 @Slf4j
@@ -15,9 +16,13 @@ import ru.beautyradar.pushservice.service.inter.PushService;
 public class PushServiceImpl implements PushService {
 
     private final FirebaseMessaging firebaseMessaging;
+    private final UserService userService;
 
     @Override
-    public Resp<?> send(PrivatePush privatePush, String token) {
+    public Resp<?> send(PrivatePush privatePush) {
+
+        String token = userService.getTokenById(privatePush.getUserId());
+
         Notification notification = Notification
                 .builder()
                 .setTitle(privatePush.getTitle())

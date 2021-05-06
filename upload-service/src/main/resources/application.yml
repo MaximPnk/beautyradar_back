@@ -1,7 +1,7 @@
 server:
   port: 9995
   servlet:
-    context-path: /uploadservice
+    context-path: /upload_service
 
 spring:
   datasource:

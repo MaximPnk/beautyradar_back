@@ -1,8 +1,8 @@
 package ru.beautyradar.uploadservice.service.inter;
 
-import ru.beautyradar.uploadservice.wrap.Resp;
+import ru.beautyradar.uploadservice.entity.UserEntity;
 
 public interface UserService {
 
-    Resp<?> findUserById(Long id);
+    UserEntity findUserById(Long id);
 }

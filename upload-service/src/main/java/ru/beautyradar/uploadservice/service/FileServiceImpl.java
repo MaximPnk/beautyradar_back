@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.beautyradar.uploadservice.service.inter.FileService;
-import ru.beautyradar.uploadservice.wrap.InitResp;
-import ru.beautyradar.uploadservice.wrap.Resp;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,32 +29,22 @@ public class FileServiceImpl implements FileService {
     private final Storage storage;
 
     @Override
-    public Resp<?> upload(MultipartFile multipartFile) {
-        try {
-            String fileName = multipartFile.getOriginalFilename();
-            fileName = UUID.randomUUID().toString().concat(getExtension(fileName));
+    public String upload(MultipartFile multipartFile) throws IOException {
+        String fileName = multipartFile.getOriginalFilename();
+        fileName = UUID.randomUUID().toString().concat(getExtension(fileName));
 
-            File file = convertToFile(multipartFile, fileName);
-            String tmpUrl = uploadFile(file, fileName);
-            file.delete();
-            return new InitResp<>().ok(tmpUrl);
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
-        }
+        File file = convertToFile(multipartFile, fileName);
+        String tmpUrl = uploadFile(file, fileName);
+        file.delete();
+
+        return tmpUrl;
     }
 
     @Override
-    public Resp<?> delete(String fileUrl) {
-        try {
-            String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1, fileUrl.lastIndexOf("?"));
-            BlobId img = BlobId.of(bucketName, fileName);
-            storage.delete(img);
-            return new InitResp<>().ok(null);
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
-        }
+    public void delete(String fileUrl) {
+        String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1, fileUrl.lastIndexOf("?"));
+        BlobId img = BlobId.of(bucketName, fileName);
+        storage.delete(img);
     }
 
     private String uploadFile(File file, String fileName) throws IOException {
