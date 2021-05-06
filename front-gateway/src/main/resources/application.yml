@@ -1,6 +1,6 @@
 server:
   servlet:
-    context-path: /front_gateway
+    context-path: /front-gateway
   port: 9999
 
 spring:

@@ -15,7 +15,7 @@ import ru.beautyradar.frontgateway.service.inter.MasterCategoryService;
 @SwaggerDefinition(tags = {@Tag(name = "Master Category Controller", description = "Контроллер для работы с категориями мастеров")})
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/master_category")
+@RequestMapping("/master-category")
 @Slf4j
 public class MasterCategoryController {
 
