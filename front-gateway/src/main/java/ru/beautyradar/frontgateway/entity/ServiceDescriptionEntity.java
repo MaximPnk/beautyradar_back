@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "service_description", schema = "beauty")
@@ -29,6 +30,6 @@ public class ServiceDescriptionEntity {
     private Integer duration; //todo - переделать на класс Duration (интервал времени)
 
     @Column(name = "price")
-    private Double price;
+    private BigDecimal price;
 
 }
