@@ -12,7 +12,6 @@ import ru.beautyradar.frontgateway.dto.MasterDto;
 import ru.beautyradar.frontgateway.dto.wrap.Resp;
 import ru.beautyradar.frontgateway.dto.wrap.RespBuilder;
 import ru.beautyradar.frontgateway.entity.*;
-import ru.beautyradar.frontgateway.event.UpdateClientRatingEvent;
 import ru.beautyradar.frontgateway.event.UpdateMasterRatingEvent;
 import ru.beautyradar.frontgateway.exc.ResourceNotFoundException;
 import ru.beautyradar.frontgateway.map.MasterMapper;
@@ -47,7 +46,7 @@ public class MasterServiceImpl implements MasterService {
     @Transactional
     public Resp<?> getAllMastersDtoByMasterCategoryId(Long id) {
         try {
-            MasterCategoryEntity masterCategoryEntity = masterCategoryService.getMasterCategoryById(id);
+            MasterCategoryEntity masterCategoryEntity = masterCategoryService.getMasterCategoryEntityById(id);
             List<MasterEntity> masterEntities = repository.findMasterEntitiesByMasterCategories(masterCategoryEntity);
             return new RespBuilder<>().setCode(0).setBody(masterEntities.stream().map(mapper::mapEntityToDto)).build();
         } catch (Exception e) {
@@ -118,7 +117,7 @@ public class MasterServiceImpl implements MasterService {
     @Transactional
     public Resp<?> addMasterCategory(Long masterId, Long masterCategoryId) {
         try {
-            MasterCategoryEntity masterCategoryEntity = masterCategoryService.getMasterCategoryById(masterCategoryId);
+            MasterCategoryEntity masterCategoryEntity = masterCategoryService.getMasterCategoryEntityById(masterCategoryId);
             MasterEntity masterEntity = getMasterEntityById(masterId);
             masterEntity.getMasterCategories().add(masterCategoryEntity);
             return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(masterEntity)).build();
@@ -132,7 +131,7 @@ public class MasterServiceImpl implements MasterService {
     @Transactional
     public Resp<?> removeMasterCategory(Long masterId, Long masterCategoryId) {
         try {
-            MasterCategoryEntity masterCategoryEntity = masterCategoryService.getMasterCategoryById(masterCategoryId);
+            MasterCategoryEntity masterCategoryEntity = masterCategoryService.getMasterCategoryEntityById(masterCategoryId);
             MasterEntity masterEntity = getMasterEntityById(masterId);
             masterEntity.getMasterCategories().remove(masterCategoryEntity);
             return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(masterEntity)).build();

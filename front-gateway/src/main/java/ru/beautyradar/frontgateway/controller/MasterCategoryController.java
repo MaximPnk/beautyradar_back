@@ -32,7 +32,7 @@ public class MasterCategoryController {
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
     @GetMapping("/master/{masterId}")
     public ResponseEntity<?> getAllMasterCategoriesByMasterId(@PathVariable("masterId") Long masterId) {
-        return ResponseEntity.ok(masterCategoryService.getAllMasterCategoriesByMasterId(masterId));
+        return ResponseEntity.ok(masterCategoryService.getAllMasterCategoriesDtoByMasterId(masterId));
     }
 
     @ApiOperation(value = "Get master category by ID", httpMethod = "GET", notes = "Получение категории по id", response = MasterCategoryResponse.class)

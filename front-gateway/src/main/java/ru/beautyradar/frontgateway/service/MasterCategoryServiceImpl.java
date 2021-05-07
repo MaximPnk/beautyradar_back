@@ -41,7 +41,7 @@ public class MasterCategoryServiceImpl implements MasterCategoryService {
     @Override
     public Resp<?> getMasterCategoryDtoById(Long categoryId) {
         try {
-            MasterCategoryEntity entity = getMasterCategoryById(categoryId);
+            MasterCategoryEntity entity = getMasterCategoryEntityById(categoryId);
             return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(entity)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -50,7 +50,7 @@ public class MasterCategoryServiceImpl implements MasterCategoryService {
     }
 
     @Override
-    public Resp<?> getAllMasterCategoriesByMasterId(Long masterId) {
+    public Resp<?> getAllMasterCategoriesDtoByMasterId(Long masterId) {
         try {
             MasterEntity master = masterService.getMasterEntityById(masterId);
             List<MasterCategoryEntity> masterCategories = repository.findAllByMaster(master);
@@ -77,7 +77,7 @@ public class MasterCategoryServiceImpl implements MasterCategoryService {
     @Transactional
     public Resp<?> updateMasterCategory(Long id, MasterCategoryDto masterCategoryDto) {
         try {
-            MasterCategoryEntity entity = getMasterCategoryById(id);
+            MasterCategoryEntity entity = getMasterCategoryEntityById(id);
             mapper.updateEntityByDto(entity, masterCategoryDto);
             return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(entity)).build();
         } catch (Exception e) {
@@ -100,7 +100,7 @@ public class MasterCategoryServiceImpl implements MasterCategoryService {
     //service methods
 
     @Override
-    public MasterCategoryEntity getMasterCategoryById(Long id) {
+    public MasterCategoryEntity getMasterCategoryEntityById(Long id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Категория с таким ID не существует"));
     }
 
