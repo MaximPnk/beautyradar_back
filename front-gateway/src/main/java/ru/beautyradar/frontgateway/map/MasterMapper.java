@@ -13,6 +13,9 @@ public class MasterMapper {
     private final UserService userService;
 
     public MasterDto mapEntityToDto(MasterEntity entity) {
+        if (entity == null) {
+            return null;
+        }
         MasterDto dto = new MasterDto();
         dto.setId(entity.getId());
         dto.setUserId(entity.getUser().getId());

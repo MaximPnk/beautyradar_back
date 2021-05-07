@@ -8,6 +8,9 @@ import ru.beautyradar.frontgateway.entity.JobStatusEntity;
 public class JobStatusMapper {
 
     public JobStatusDto mapEntityToDto(JobStatusEntity entity) {
+        if (entity == null) {
+            return null;
+        }
         JobStatusDto dto = new JobStatusDto();
         dto.setId(entity.getId());
         dto.setName(entity.getName());

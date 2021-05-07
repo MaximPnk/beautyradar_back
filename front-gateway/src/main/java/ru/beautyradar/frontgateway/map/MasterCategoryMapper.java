@@ -8,6 +8,9 @@ import ru.beautyradar.frontgateway.entity.MasterCategoryEntity;
 public class MasterCategoryMapper {
 
     public MasterCategoryDto mapEntityToDto(MasterCategoryEntity entity) {
+        if (entity == null) {
+            return null;
+        }
         MasterCategoryDto dto = new MasterCategoryDto();
         dto.setId(entity.getId());
         dto.setName(entity.getName());

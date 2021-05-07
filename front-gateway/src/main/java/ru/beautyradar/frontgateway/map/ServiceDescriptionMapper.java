@@ -16,6 +16,9 @@ public class ServiceDescriptionMapper {
     private final ServiceCategoryService serviceCategoryService;
 
     public ServiceDescriptionDto mapEntityToDto(ServiceDescriptionEntity entity) {
+        if (entity == null) {
+            return null;
+        }
         ServiceDescriptionDto dto = new ServiceDescriptionDto();
         dto.setId(entity.getId());
         dto.setMasterId(entity.getMaster().getId());

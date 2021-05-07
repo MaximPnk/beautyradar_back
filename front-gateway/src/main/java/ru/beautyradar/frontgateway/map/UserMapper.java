@@ -8,6 +8,9 @@ import ru.beautyradar.frontgateway.entity.UserEntity;
 public class UserMapper {
 
     public UserDto mapEntityToDto(UserEntity entity) {
+        if (entity == null) {
+            return null;
+        }
         UserDto dto = new UserDto();
         dto.setId(entity.getId());
         dto.setLogin(entity.getLogin());

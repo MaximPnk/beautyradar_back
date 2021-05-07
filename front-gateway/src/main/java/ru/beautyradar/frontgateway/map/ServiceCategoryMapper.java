@@ -13,6 +13,9 @@ public class ServiceCategoryMapper {
     private final MasterCategoryService masterCategoryService;
 
     public ServiceCategoryDto mapEntityToDto(ServiceCategoryEntity entity) {
+        if (entity == null) {
+            return null;
+        }
         ServiceCategoryDto dto = new ServiceCategoryDto();
         dto.setId(entity.getId());
         dto.setMasterCategoryId(entity.getMasterCategory().getId());

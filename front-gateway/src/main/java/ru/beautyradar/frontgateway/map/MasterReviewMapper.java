@@ -15,6 +15,9 @@ public class MasterReviewMapper {
     private final ClientService clientService;
 
     public MasterReviewDto mapEntityToDto(MasterReviewEntity entity) {
+        if (entity == null) {
+            return null;
+        }
         MasterReviewDto dto = new MasterReviewDto();
         dto.setId(entity.getId());
         dto.setMasterId(entity.getMaster().getId());
