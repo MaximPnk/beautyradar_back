@@ -71,6 +71,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public Resp<?> saveUser(UserDto userDto) {
+        //todo присваивание закешированной роли
         try {
             UserEntity entity = repository.save(mapper.mapDtoToEntity(userDto));
             publisher.publishEvent(new SaveClientEvent(ClientService.class, entity));

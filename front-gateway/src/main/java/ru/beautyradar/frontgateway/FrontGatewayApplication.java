@@ -8,6 +8,8 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource(value = "classpath:front-gateway-secret.properties")
 public class FrontGatewayApplication {
 
+    //todo согласовать удаление из бд
+
     public static void main(String[] args) {
         SpringApplication.run(FrontGatewayApplication.class, args);
     }

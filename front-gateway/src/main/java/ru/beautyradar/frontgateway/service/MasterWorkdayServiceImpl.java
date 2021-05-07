@@ -40,6 +40,8 @@ public class MasterWorkdayServiceImpl implements MasterWorkdayService {
         }
     }
 
+    //todo выдавать список свободного времени после согласования с руководством и заливки тестовых данных
+
     @Override
     @Transactional
     public Resp<?> getAllMasterWorkdaysDtoByDate(LocalDate date) {
@@ -67,6 +69,7 @@ public class MasterWorkdayServiceImpl implements MasterWorkdayService {
     @Override
     @Transactional
     public Resp<?> createMasterWorkday(MasterWorkdayDto masterWorkdayDto) {
+        //todo согласовать логику создания согласно заранее обговорённому бизнес-процессу
         try {
             MasterWorkdayEntity masterWorkdayEntity = mapper.mapDtoToEntity(masterWorkdayDto);
             repository.save(masterWorkdayEntity);

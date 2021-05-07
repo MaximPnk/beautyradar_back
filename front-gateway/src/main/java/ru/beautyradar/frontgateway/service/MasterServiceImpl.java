@@ -32,6 +32,8 @@ public class MasterServiceImpl implements MasterService {
     private final UserService userService;
     private MasterCategoryService masterCategoryService;
 
+    //todo выдавать отсортированный список мастеров другой дтошкой с доп. полем расстояния
+
     @Override
     public Resp<?> getAllMastersDto() {
         try {
@@ -80,6 +82,7 @@ public class MasterServiceImpl implements MasterService {
 
     @Override
     public Resp<?> createMaster(MasterDto masterDto) {
+        //todo задание координат по валидному адресу
         try {
             MasterEntity master = repository.save(mapper.mapDtoToEntity(masterDto));
             return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(master)).build();
