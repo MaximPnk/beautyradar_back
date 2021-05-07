@@ -7,13 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class JobStatusDto {
     private Long id;
-    private String upn;
-    private String token;
-    private String login;
     private String name;
-    private String phone;
-    private String email;
-    private String img;
 }

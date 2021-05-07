@@ -9,6 +9,4 @@ import java.util.Optional;
 @Repository
 public interface JobStatusRepository extends JpaRepository<JobStatusEntity, Long> {
 
-      Optional<JobStatusEntity> findByName(String name);
-
 }
