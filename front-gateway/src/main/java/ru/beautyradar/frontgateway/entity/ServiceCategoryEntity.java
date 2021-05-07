@@ -17,7 +17,7 @@ public class ServiceCategoryEntity {
     @Column(name = "service_category_id")
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "master_category_id")
     private MasterCategoryEntity masterCategory;
 

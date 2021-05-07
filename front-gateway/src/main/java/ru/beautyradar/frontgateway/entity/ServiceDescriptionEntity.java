@@ -18,11 +18,11 @@ public class ServiceDescriptionEntity {
     @Column(name = "service_description_id")
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "master_id")
     private MasterEntity master;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "service_category_id")
     private ServiceCategoryEntity serviceCategory;
 

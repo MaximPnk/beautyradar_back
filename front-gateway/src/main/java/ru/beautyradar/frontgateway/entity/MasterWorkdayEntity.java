@@ -19,7 +19,7 @@ public class MasterWorkdayEntity {
     @Column(name = "master_workday_id")
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "master_id")
     private MasterEntity master;
 

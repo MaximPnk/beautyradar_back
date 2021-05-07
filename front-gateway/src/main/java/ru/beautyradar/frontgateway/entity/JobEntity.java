@@ -21,19 +21,19 @@ public class JobEntity {
     @Column(name = "job_id")
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "master_workday_id")
     private MasterWorkdayEntity masterWorkDay;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "client_id")
     private ClientEntity client;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "service_description_id")
     private ServiceDescriptionEntity serviceDescription;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "job_status_id")
     private JobStatusEntity jobStatus;
 
@@ -42,7 +42,6 @@ public class JobEntity {
 
     @Column(name = "end_time")
     private LocalDateTime endTime;
-
 
     @Column(name = "created_at")
     @CreationTimestamp
