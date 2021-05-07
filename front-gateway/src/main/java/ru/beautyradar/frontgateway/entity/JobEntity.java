@@ -23,7 +23,7 @@ public class JobEntity {
 
     @ManyToOne
     @JoinColumn(name = "master_workday_id")
-    private MasterWorkdayEntity masterWorkDay;
+    private MasterWorkdayEntity masterWorkday;
 
     @ManyToOne
     @JoinColumn(name = "client_id")
@@ -50,7 +50,5 @@ public class JobEntity {
     @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-
 
 }

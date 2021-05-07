@@ -42,14 +42,14 @@ public class JobStatusController {
         return ResponseEntity.ok(jobStatusService.createJobStatus(jobStatusDto));
     }
 
-    @ApiOperation(value = "Update client review", httpMethod = "PUT", notes = "Изменение состояния записей", response = JobStatusResponse.class)
+    @ApiOperation(value = "Update job status", httpMethod = "PUT", notes = "Изменение состояния записей", response = JobStatusResponse.class)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
     @PutMapping("/{jobStatusId}")
     public ResponseEntity<?> updateJobStatus(@PathVariable("jobStatusId") Long jobStatusId, @RequestBody JobStatusDto jobStatusDto) {
         return ResponseEntity.ok(jobStatusService.updateJobStatus(jobStatusId, jobStatusDto));
     }
 
-    @ApiOperation(value = "Delete client review by id", httpMethod = "DELETE", notes = "Удаление состояния записей по id", response = Resp.class)
+    @ApiOperation(value = "Delete job status by id", httpMethod = "DELETE", notes = "Удаление состояния записей по id", response = Resp.class)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
     @DeleteMapping("/{jobStatusId}")
     public ResponseEntity<?> deleteJobStatusById(@PathVariable("jobStatusId") Long jobStatusId) {

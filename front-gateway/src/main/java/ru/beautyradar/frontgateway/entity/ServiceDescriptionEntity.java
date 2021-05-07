@@ -27,7 +27,7 @@ public class ServiceDescriptionEntity {
     private ServiceCategoryEntity serviceCategory;
 
     @Column(name = "duration")
-    private Integer duration; //todo - переделать на класс Duration (интервал времени)
+    private Integer duration;
 
     @Column(name = "price")
     private BigDecimal price;
