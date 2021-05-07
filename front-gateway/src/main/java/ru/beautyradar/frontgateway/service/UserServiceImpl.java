@@ -8,11 +8,13 @@ import ru.beautyradar.frontgateway.dao.UserRepository;
 import ru.beautyradar.frontgateway.dto.UserDto;
 import ru.beautyradar.frontgateway.dto.wrap.Resp;
 import ru.beautyradar.frontgateway.dto.wrap.RespBuilder;
+import ru.beautyradar.frontgateway.entity.RoleEntity;
 import ru.beautyradar.frontgateway.entity.UserEntity;
 import ru.beautyradar.frontgateway.event.SaveClientEvent;
 import ru.beautyradar.frontgateway.exc.ResourceNotFoundException;
 import ru.beautyradar.frontgateway.map.UserMapper;
 import ru.beautyradar.frontgateway.service.inter.ClientService;
+import ru.beautyradar.frontgateway.service.inter.RoleService;
 import ru.beautyradar.frontgateway.service.inter.UserService;
 
 import javax.transaction.Transactional;
@@ -23,6 +25,7 @@ import javax.transaction.Transactional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
+    private final RoleService roleService;
     private final UserMapper mapper;
     private final ApplicationEventPublisher publisher;
 
@@ -101,6 +104,34 @@ public class UserServiceImpl implements UserService {
         try {
             repository.deleteById(id);
             return new RespBuilder<>().setCode(0).build();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
+        }
+    }
+
+    @Override
+    @Transactional
+    public Resp<?> addRoleToUser(Long userId, Long roleId) {
+        try {
+            RoleEntity role = roleService.getRoleEntityById(roleId);
+            UserEntity user = getUserEntityById(userId);
+            user.getUserRoles().add(role);
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(user)).build();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
+        }
+    }
+
+    @Override
+    @Transactional
+    public Resp<?> removeRoleFromUser(Long userId, Long roleId) {
+        try {
+            RoleEntity role = roleService.getRoleEntityById(roleId);
+            UserEntity user = getUserEntityById(userId);
+            user.getUserRoles().remove(role);
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(user)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
             return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
