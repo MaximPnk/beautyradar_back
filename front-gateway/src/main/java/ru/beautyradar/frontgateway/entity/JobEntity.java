@@ -8,7 +8,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "job", schema = "beauty")
@@ -24,7 +23,7 @@ public class JobEntity {
 
     @OneToOne
     @JoinColumn(name = "master_workday_id")
-    private MasterWorkDayEntity masterWorkDay;
+    private MasterWorkdayEntity masterWorkDay;
 
     @OneToOne
     @JoinColumn(name = "client_id")
