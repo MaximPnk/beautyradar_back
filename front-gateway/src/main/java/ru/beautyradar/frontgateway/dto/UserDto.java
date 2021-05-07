@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
-
     private Long id;
     private String upn;
     private String token;
@@ -17,5 +16,4 @@ public class UserDto {
     private String phone;
     private String email;
     private String img;
-
 }

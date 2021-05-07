@@ -6,15 +6,13 @@ import ru.beautyradar.frontgateway.entity.MasterEntity;
 import ru.beautyradar.frontgateway.entity.ServiceCategoryEntity;
 import ru.beautyradar.frontgateway.entity.ServiceDescriptionEntity;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface ServiceDescriptionRepository extends JpaRepository<ServiceDescriptionEntity, Long> {
 
-    Optional<ServiceDescriptionEntity> findByMaster(MasterEntity master);
+    List<ServiceDescriptionEntity> findByMaster(MasterEntity master);
 
-    Optional<ServiceDescriptionEntity> findByServiceCategory(ServiceCategoryEntity category);
-
-    Optional<ServiceDescriptionEntity> findByPrice(Double price);
+    List<ServiceDescriptionEntity> findByServiceCategory(ServiceCategoryEntity category);
 
 }

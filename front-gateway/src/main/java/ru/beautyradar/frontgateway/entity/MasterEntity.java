@@ -22,7 +22,7 @@ public class MasterEntity {
     @Column(name = "master_id")
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
@@ -47,12 +47,18 @@ public class MasterEntity {
     @JoinTable(name = "favorite",
             joinColumns = @JoinColumn(name = "master_id"),
             inverseJoinColumns = @JoinColumn(name = "client_id"))
-    private List<ClientEntity> favoriteClients; // todo - выпилить
+    private List<ClientEntity> favoriteClients;
 
     @ManyToMany
     @JoinTable(name = "master_categories",
             joinColumns = @JoinColumn(name = "master_id"),
             inverseJoinColumns = @JoinColumn(name = "master_category_id"))
     private List<MasterCategoryEntity> masterCategories;
+
+    @ManyToMany
+    @JoinTable(name = "client_review",
+            joinColumns = @JoinColumn(name = "master_id"),
+            inverseJoinColumns = @JoinColumn(name = "client_review_id"))
+    private List<ClientReviewEntity> clientReviews;
 
 }

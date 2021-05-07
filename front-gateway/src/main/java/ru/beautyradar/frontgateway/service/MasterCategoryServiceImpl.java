@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.beautyradar.frontgateway.dao.MasterCategoryRepository;
 import ru.beautyradar.frontgateway.dto.MasterCategoryDto;
-import ru.beautyradar.frontgateway.dto.wrap.InitResp;
 import ru.beautyradar.frontgateway.dto.wrap.Resp;
+import ru.beautyradar.frontgateway.dto.wrap.RespBuilder;
 import ru.beautyradar.frontgateway.entity.MasterCategoryEntity;
 import ru.beautyradar.frontgateway.entity.MasterEntity;
 import ru.beautyradar.frontgateway.exc.ResourceNotFoundException;
@@ -31,33 +31,33 @@ public class MasterCategoryServiceImpl implements MasterCategoryService {
     public Resp<?> getAllMasterCategoriesDto() {
         try {
             List<MasterCategoryEntity> entities = repository.findAll();
-            return new InitResp<>().ok(entities.stream().map(mapper::mapEntityToDto));
+            return new RespBuilder<>().setCode(0).setBody(entities.stream().map(mapper::mapEntityToDto)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
     @Override
     public Resp<?> getMasterCategoryDtoById(Long categoryId) {
         try {
-            MasterCategoryEntity entity = getMasterCategoryById(categoryId);
-            return new InitResp<>().ok(mapper.mapEntityToDto(entity));
+            MasterCategoryEntity entity = getMasterCategoryEntityById(categoryId);
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(entity)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
     @Override
-    public Resp<?> getAllMasterCategoriesByMasterId(Long masterId) {
+    public Resp<?> getAllMasterCategoriesDtoByMasterId(Long masterId) {
         try {
             MasterEntity master = masterService.getMasterEntityById(masterId);
             List<MasterCategoryEntity> masterCategories = repository.findAllByMaster(master);
-            return new InitResp<>().ok(masterCategories.stream().map(mapper::mapEntityToDto));
+            return new RespBuilder<>().setCode(0).setBody(masterCategories.stream().map(mapper::mapEntityToDto)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -66,10 +66,10 @@ public class MasterCategoryServiceImpl implements MasterCategoryService {
     public Resp<?> createMasterCategory(MasterCategoryDto masterCategoryDto) {
         try {
             MasterCategoryEntity entity = repository.save(mapper.mapDtoToEntity(masterCategoryDto));
-            return new InitResp<>().ok(mapper.mapEntityToDto(entity));
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(entity)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -77,12 +77,12 @@ public class MasterCategoryServiceImpl implements MasterCategoryService {
     @Transactional
     public Resp<?> updateMasterCategory(Long id, MasterCategoryDto masterCategoryDto) {
         try {
-            MasterCategoryEntity entity = getMasterCategoryById(id);
+            MasterCategoryEntity entity = getMasterCategoryEntityById(id);
             mapper.updateEntityByDto(entity, masterCategoryDto);
-            return new InitResp<>().ok(mapper.mapEntityToDto(entity));
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(entity)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -90,17 +90,17 @@ public class MasterCategoryServiceImpl implements MasterCategoryService {
     public Resp<?> deleteMasterCategoryById(Long id) {
         try {
             repository.deleteById(id);
-            return new InitResp<>().ok(null);
+            return new RespBuilder<>().setCode(0).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
     //service methods
 
     @Override
-    public MasterCategoryEntity getMasterCategoryById(Long id) {
+    public MasterCategoryEntity getMasterCategoryEntityById(Long id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Категория с таким ID не существует"));
     }
 

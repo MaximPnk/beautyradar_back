@@ -20,6 +20,10 @@ public interface UserService {
 
     Resp<?> deleteUserById(Long id);
 
+    Resp<?> addRoleToUser(Long userId, Long roleId);
+
+    Resp<?> removeRoleFromUser(Long userId, Long roleId);
+
     UserEntity getUserEntityById(Long id);
 
     UserEntity getUserEntityByUpn(String upn);

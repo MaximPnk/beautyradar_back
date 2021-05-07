@@ -8,7 +8,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "master_review", schema = "beauty")
@@ -22,16 +21,16 @@ public class MasterReviewEntity {
     @Column(name = "master_review_id")
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "master_id")
     private MasterEntity master;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "client_id")
     private ClientEntity client;
 
     @Column(name = "rating")
-    private Double rating;
+    private Integer rating;
 
     @Column(name = "description")
     private String description;

@@ -1,10 +1,10 @@
 package ru.beautyradar.frontgateway.service.inter;
 
-import org.springframework.transaction.annotation.Transactional;
 import ru.beautyradar.frontgateway.dto.MasterDto;
 import ru.beautyradar.frontgateway.dto.wrap.Resp;
 import ru.beautyradar.frontgateway.entity.MasterEntity;
 import ru.beautyradar.frontgateway.entity.UserEntity;
+import ru.beautyradar.frontgateway.event.UpdateMasterRatingEvent;
 
 public interface MasterService {
 
@@ -22,13 +22,12 @@ public interface MasterService {
 
     Resp<?> deleteMasterById(Long id);
 
-    @Transactional
     Resp<?> addMasterCategory(Long masterId, Long masterCategoryId);
 
-    @Transactional
     Resp<?> removeMasterCategory(Long masterId, Long masterCategoryId);
 
-    //service methods
+    void updateRating(UpdateMasterRatingEvent event);
+
     MasterEntity getMasterEntityById(Long id);
 
     MasterEntity getMasterEntityByUser(UserEntity userEntity);

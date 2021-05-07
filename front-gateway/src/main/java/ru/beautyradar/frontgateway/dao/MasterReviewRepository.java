@@ -7,11 +7,16 @@ import ru.beautyradar.frontgateway.entity.MasterEntity;
 import ru.beautyradar.frontgateway.entity.MasterReviewEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MasterReviewRepository extends JpaRepository<MasterReviewEntity, Long> {
 
-   List<MasterReviewEntity> findAllByMaster(MasterEntity master);
+   List<MasterReviewEntity> findAllByClient(ClientEntity clientEntity);
 
-   List<MasterReviewEntity> findAllByClient(ClientEntity client);
+   List<MasterReviewEntity> findAllByMaster(MasterEntity masterEntity);
+
+   Optional<MasterReviewEntity> findFirstByMasterAndClient(MasterEntity masterEntity, ClientEntity clientEntity);
+
+
 }

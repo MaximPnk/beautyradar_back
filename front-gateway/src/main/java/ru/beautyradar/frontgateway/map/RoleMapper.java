@@ -7,7 +7,6 @@ import ru.beautyradar.frontgateway.entity.RoleEntity;
 @Component
 public class RoleMapper {
 
-
     public RoleDto mapEntityToDto(RoleEntity entity) {
         if (entity == null) {
             return null;
@@ -15,15 +14,16 @@ public class RoleMapper {
         RoleDto dto = new RoleDto();
         dto.setId(entity.getId());
         dto.setName(entity.getName());
-        //todo - надо доделать
         return dto;
     }
 
     public RoleEntity mapDtoToEntity(RoleDto dto) {
         RoleEntity entity = new RoleEntity();
-        entity.setId(dto.getId());
-        entity.setName(dto.getName());
+        updateEntityByDto(entity, dto);
         return entity;
     }
 
+    public void updateEntityByDto(RoleEntity entity, RoleDto dto) {
+        entity.setName(dto.getName());
+    }
 }

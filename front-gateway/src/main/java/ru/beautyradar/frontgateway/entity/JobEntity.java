@@ -8,7 +8,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "job", schema = "beauty")
@@ -22,19 +21,19 @@ public class JobEntity {
     @Column(name = "job_id")
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "master_workday_id")
-    private MasterWorkDayEntity masterWorkDay;
+    private MasterWorkdayEntity masterWorkday;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "client_id")
     private ClientEntity client;
 
-    @OneToOne (cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "service_description_id")
     private ServiceDescriptionEntity serviceDescription;
 
-    @OneToOne (cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "job_status_id")
     private JobStatusEntity jobStatus;
 
@@ -44,7 +43,6 @@ public class JobEntity {
     @Column(name = "end_time")
     private LocalDateTime endTime;
 
-
     @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -52,7 +50,5 @@ public class JobEntity {
     @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-
 
 }

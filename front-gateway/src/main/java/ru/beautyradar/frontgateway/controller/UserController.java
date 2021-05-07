@@ -72,4 +72,18 @@ public class UserController {
         return ResponseEntity.ok(userService.deleteUserById(id));
     }
 
+    @ApiOperation(value = "Add role to user", httpMethod = "PUT", notes = "Добавление роли пользователю", response = UserResponse.class)
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
+    @PutMapping("/{userId}/role/{roleId}")
+    public ResponseEntity<?> addRoleToUser(@PathVariable("userId") Long userId, @PathVariable("roleId") Long roleId) {
+        return ResponseEntity.ok(userService.addRoleToUser(userId, roleId));
+    }
+
+    @ApiOperation(value = "Remove role from user", httpMethod = "DELETE", notes = "Удаление роли у пользователя", response = UserResponse.class)
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
+    @DeleteMapping("/{userId}/role/{roleId}")
+    public ResponseEntity<?> removeRoleFromUser(@PathVariable("userId") Long userId, @PathVariable("roleId") Long roleId) {
+        return ResponseEntity.ok(userService.removeRoleFromUser(userId, roleId));
+    }
+
 }

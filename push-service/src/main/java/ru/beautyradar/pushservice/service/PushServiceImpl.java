@@ -4,8 +4,8 @@ import com.google.firebase.messaging.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.beautyradar.pushservice.dto.wrap.InitResp;
 import ru.beautyradar.pushservice.dto.wrap.Resp;
+import ru.beautyradar.pushservice.dto.wrap.RespBuilder;
 import ru.beautyradar.pushservice.model.PrivatePush;
 import ru.beautyradar.pushservice.service.inter.PushService;
 import ru.beautyradar.pushservice.service.inter.UserService;
@@ -38,10 +38,10 @@ public class PushServiceImpl implements PushService {
                 .build();
 
         try {
-            return new InitResp<>().ok(firebaseMessaging.send(message));
+            return new RespBuilder<>().setCode(0).setBody(firebaseMessaging.send(message)).build();
         } catch (FirebaseMessagingException e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 }

@@ -11,8 +11,6 @@ import java.util.Optional;
 @Repository
 public interface MasterCategoryRepository extends JpaRepository<MasterCategoryEntity, Long> {
 
-    Optional<MasterCategoryEntity> findByName(String categoryName);
-
     List<MasterCategoryEntity> findAllByMaster(MasterEntity entity);
 
 }

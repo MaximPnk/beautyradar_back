@@ -13,7 +13,7 @@ public interface MasterCategoryService {
 
     Resp<?> getMasterCategoryDtoById(Long categoryId);
 
-    Resp<?> getAllMasterCategoriesByMasterId(Long masterId);
+    Resp<?> getAllMasterCategoriesDtoByMasterId(Long masterId);
 
     @Transactional
     Resp<?> createMasterCategory(MasterCategoryDto masterCategoryDto);
@@ -23,5 +23,5 @@ public interface MasterCategoryService {
 
     Resp<?> deleteMasterCategoryById(Long id);
 
-    MasterCategoryEntity getMasterCategoryById(Long id);
+    MasterCategoryEntity getMasterCategoryEntityById(Long id);
 }

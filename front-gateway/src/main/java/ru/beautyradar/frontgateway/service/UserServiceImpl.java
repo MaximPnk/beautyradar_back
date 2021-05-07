@@ -2,18 +2,19 @@ package ru.beautyradar.frontgateway.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import ru.beautyradar.frontgateway.dao.UserRepository;
 import ru.beautyradar.frontgateway.dto.UserDto;
-import ru.beautyradar.frontgateway.dto.wrap.InitResp;
 import ru.beautyradar.frontgateway.dto.wrap.Resp;
+import ru.beautyradar.frontgateway.dto.wrap.RespBuilder;
+import ru.beautyradar.frontgateway.entity.RoleEntity;
 import ru.beautyradar.frontgateway.entity.UserEntity;
 import ru.beautyradar.frontgateway.event.SaveClientEvent;
 import ru.beautyradar.frontgateway.exc.ResourceNotFoundException;
 import ru.beautyradar.frontgateway.map.UserMapper;
 import ru.beautyradar.frontgateway.service.inter.ClientService;
+import ru.beautyradar.frontgateway.service.inter.RoleService;
 import ru.beautyradar.frontgateway.service.inter.UserService;
 
 import javax.transaction.Transactional;
@@ -24,17 +25,17 @@ import javax.transaction.Transactional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
+    private final RoleService roleService;
     private final UserMapper mapper;
     private final ApplicationEventPublisher publisher;
-    private ClientService clientService;
 
     @Override
     public Resp<?> getAllUsersDto() {
         try {
-            return new InitResp<>().ok(repository.findAll().stream().map(mapper::mapEntityToDto));
+            return new RespBuilder<>().setCode(0).setBody(repository.findAll().stream().map(mapper::mapEntityToDto)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -42,10 +43,10 @@ public class UserServiceImpl implements UserService {
     public Resp<?> getUserDtoById(Long id) {
         try {
             UserEntity userEntity = getUserEntityById(id);
-            return new InitResp<>().ok(mapper.mapEntityToDto(userEntity));
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(userEntity)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -53,33 +54,34 @@ public class UserServiceImpl implements UserService {
     public Resp<?> getUserDtoByUpn(String upn) {
         try {
             UserEntity userEntity = getUserEntityByUpn(upn);
-            return new InitResp<>().ok(mapper.mapEntityToDto(userEntity));
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(userEntity)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
     @Override
     public Resp<?> existsUserByUpn(String upn) {
         try {
-            return new InitResp<>().ok(repository.existsByUpn(upn));
+            return new RespBuilder<>().setCode(0).setBody(repository.existsByUpn(upn)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
     @Override
     @Transactional
     public Resp<?> saveUser(UserDto userDto) {
+        //todo присваивание закешированной роли
         try {
             UserEntity entity = repository.save(mapper.mapDtoToEntity(userDto));
-            publisher.publishEvent(new SaveClientEvent(clientService, entity));
-            return new InitResp<>().ok(mapper.mapEntityToDto(entity));
+            publisher.publishEvent(new SaveClientEvent(ClientService.class, entity));
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(entity)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -89,10 +91,10 @@ public class UserServiceImpl implements UserService {
         try {
             UserEntity userEntity = getUserEntityById(id);
             mapper.updateEntityByDto(userEntity, userDto);
-            return new InitResp<>().ok(mapper.mapEntityToDto(userEntity));
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(userEntity)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -101,10 +103,38 @@ public class UserServiceImpl implements UserService {
     public Resp<?> deleteUserById(Long id) {
         try {
             repository.deleteById(id);
-            return new InitResp<>().ok(null);
+            return new RespBuilder<>().setCode(0).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
+        }
+    }
+
+    @Override
+    @Transactional
+    public Resp<?> addRoleToUser(Long userId, Long roleId) {
+        try {
+            RoleEntity role = roleService.getRoleEntityById(roleId);
+            UserEntity user = getUserEntityById(userId);
+            user.getUserRoles().add(role);
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(user)).build();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
+        }
+    }
+
+    @Override
+    @Transactional
+    public Resp<?> removeRoleFromUser(Long userId, Long roleId) {
+        try {
+            RoleEntity role = roleService.getRoleEntityById(roleId);
+            UserEntity user = getUserEntityById(userId);
+            user.getUserRoles().remove(role);
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(user)).build();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -120,10 +150,4 @@ public class UserServiceImpl implements UserService {
         return repository.findFirstByUpn(upn).orElseThrow(() -> new ResourceNotFoundException("Пользователь с таким uid не найден"));
     }
 
-    //cyclic
-
-    @Autowired
-    public void setClientService(ClientService clientService) {
-        this.clientService = clientService;
-    }
 }

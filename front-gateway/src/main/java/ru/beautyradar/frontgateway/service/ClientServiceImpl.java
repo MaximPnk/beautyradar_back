@@ -2,21 +2,23 @@ package ru.beautyradar.frontgateway.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.beautyradar.frontgateway.dao.ClientRepository;
-import ru.beautyradar.frontgateway.dto.wrap.InitResp;
 import ru.beautyradar.frontgateway.dto.wrap.Resp;
+import ru.beautyradar.frontgateway.dto.wrap.RespBuilder;
 import ru.beautyradar.frontgateway.entity.ClientEntity;
+import ru.beautyradar.frontgateway.entity.MasterReviewEntity;
 import ru.beautyradar.frontgateway.entity.UserEntity;
 import ru.beautyradar.frontgateway.event.SaveClientEvent;
+import ru.beautyradar.frontgateway.event.UpdateClientRatingEvent;
 import ru.beautyradar.frontgateway.exc.ResourceNotFoundException;
 import ru.beautyradar.frontgateway.map.ClientMapper;
 import ru.beautyradar.frontgateway.service.inter.ClientService;
 import ru.beautyradar.frontgateway.service.inter.UserService;
+
+import java.util.OptionalDouble;
 
 @Service
 @RequiredArgsConstructor
@@ -25,15 +27,15 @@ public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository repository;
     private final ClientMapper mapper;
-    private UserService userService;
+    private final UserService userService;
 
     @Override
     public Resp<?> getAllClientsDto() {
         try {
-            return new InitResp<>().ok(repository.findAll().stream().map(mapper::mapEntityToDto));
+            return new RespBuilder<>().setCode(0).setBody(repository.findAll().stream().map(mapper::mapEntityToDto)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -41,10 +43,10 @@ public class ClientServiceImpl implements ClientService {
     public Resp<?> getClientDtoById(Long id) {
         try {
             ClientEntity clientEntity = getClientEntityById(id);
-            return new InitResp<>().ok(mapper.mapEntityToDto(clientEntity));
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(clientEntity)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
 
     }
@@ -55,17 +57,35 @@ public class ClientServiceImpl implements ClientService {
         try {
             UserEntity userEntity = userService.getUserEntityById(id);
             ClientEntity clientEntity = getClientEntityByUser(userEntity);
-            return new InitResp<>().ok(mapper.mapEntityToDto(clientEntity));
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(clientEntity)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
+
+    //event listener
 
     @Override
     @EventListener
     public void saveClient(SaveClientEvent event) {
         repository.save(new ClientEntity(event.getUserEntity()));
+    }
+
+    @Override
+    @EventListener
+    @Transactional
+    public void updateRating(UpdateClientRatingEvent event) {
+        ClientEntity client = event.getClientEntity();
+        for (MasterReviewEntity masterReview : client.getMasterReviews()) {
+            System.out.println("rating = " + masterReview.getRating());
+        }
+        OptionalDouble rating = client.getMasterReviews().stream().mapToInt(MasterReviewEntity::getRating).average();
+        if (rating.isPresent()) {
+            client.setRating(rating.getAsDouble());
+        } else {
+            client.setRating(null);
+        }
     }
 
     //service methods
@@ -80,11 +100,4 @@ public class ClientServiceImpl implements ClientService {
         return repository.findByUser(userEntity).orElseThrow(() -> new ResourceNotFoundException("Пользователь не является клиентом"));
     }
 
-    //cyclic
-
-    @Lazy
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
 }

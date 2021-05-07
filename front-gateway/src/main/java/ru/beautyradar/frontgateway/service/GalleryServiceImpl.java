@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.beautyradar.frontgateway.dao.GalleryRepository;
-import ru.beautyradar.frontgateway.dto.wrap.InitResp;
 import ru.beautyradar.frontgateway.dto.wrap.Resp;
+import ru.beautyradar.frontgateway.dto.wrap.RespBuilder;
 import ru.beautyradar.frontgateway.entity.GalleryEntity;
 import ru.beautyradar.frontgateway.entity.MasterEntity;
 import ru.beautyradar.frontgateway.exc.ResourceNotFoundException;
@@ -31,10 +31,10 @@ public class GalleryServiceImpl implements GalleryService {
         try {
             MasterEntity masterEntity = masterService.getMasterEntityById(id);
             List<GalleryEntity> galleryEntities = repository.findGalleryEntitiesByMaster(masterEntity);
-            return new InitResp<>().ok(galleryEntities.stream().map(mapper::mapEntityToDto));
+            return new RespBuilder<>().setCode(0).setBody(galleryEntities.stream().map(mapper::mapEntityToDto)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -43,10 +43,10 @@ public class GalleryServiceImpl implements GalleryService {
     public Resp<?> getGalleryDtoById(Long id) {
         try {
             GalleryEntity galleryEntity = getGalleryEntityById(id);
-            return new InitResp<>().ok(mapper.mapEntityToDto(galleryEntity));
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(galleryEntity)).build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 

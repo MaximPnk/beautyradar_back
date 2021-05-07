@@ -8,8 +8,8 @@ import ru.beautyradar.uploadservice.entity.UserEntity;
 import ru.beautyradar.uploadservice.service.inter.AvatarService;
 import ru.beautyradar.uploadservice.service.inter.FileService;
 import ru.beautyradar.uploadservice.service.inter.UserService;
-import ru.beautyradar.uploadservice.wrap.InitResp;
 import ru.beautyradar.uploadservice.wrap.Resp;
+import ru.beautyradar.uploadservice.wrap.RespBuilder;
 
 import javax.transaction.Transactional;
 
@@ -29,10 +29,10 @@ public class AvatarServiceImpl implements AvatarService {
             fileService.delete(user.getImg());
             String url = fileService.upload(multipartFile);
             user.setImg(url);
-            return new InitResp<>().ok(url);
+            return new RespBuilder<>().setCode(0).setBody(url).build();
         } catch (Exception e) {
             log.info(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 
@@ -43,10 +43,10 @@ public class AvatarServiceImpl implements AvatarService {
             UserEntity user = userService.findUserById(userId);
             user.setImg(null);
             fileService.delete(user.getImg());
-            return new InitResp<>().ok(null);
+            return new RespBuilder<>().setCode(0).build();
         } catch (Exception e) {
             log.info(e.getMessage());
-            return new InitResp<>().exc(1, e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
         }
     }
 }

@@ -21,7 +21,7 @@ public class GalleryEntity {
     @Column(name = "gallery_id")
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "master_id")
     private MasterEntity master;
 

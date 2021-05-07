@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "service_description", schema = "beauty")
@@ -17,18 +18,18 @@ public class ServiceDescriptionEntity {
     @Column(name = "service_description_id")
     private Long id;
 
-    @OneToOne (cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "master_id")
     private MasterEntity master;
 
-    @OneToOne (cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "service_category_id")
     private ServiceCategoryEntity serviceCategory;
 
     @Column(name = "duration")
-    private Integer duration; //todo - переделать на класс Duration (интервал времени)
+    private Integer duration;
 
     @Column(name = "price")
-    private Double price;
+    private BigDecimal price;
 
 }

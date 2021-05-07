@@ -8,11 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MasterDto {
-
     private Long id;
     private Long userId;
     private String address;
     private Double rating;
     private String coordinates;
-
 }
