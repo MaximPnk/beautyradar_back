@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.beautyradar.frontgateway.dto.ServiceDescriptionDto;
 import ru.beautyradar.frontgateway.entity.ServiceDescriptionEntity;
-import ru.beautyradar.frontgateway.service.inter.MasterCategoryService;
 import ru.beautyradar.frontgateway.service.inter.MasterService;
 import ru.beautyradar.frontgateway.service.inter.ServiceCategoryService;
 

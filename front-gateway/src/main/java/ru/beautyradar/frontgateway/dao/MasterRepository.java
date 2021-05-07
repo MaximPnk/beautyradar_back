@@ -15,4 +15,5 @@ public interface MasterRepository extends JpaRepository<MasterEntity, Long> {
     Optional<MasterEntity> findFirstByUser(UserEntity entity);
 
     List<MasterEntity> findMasterEntitiesByMasterCategories(MasterCategoryEntity masterCategoryEntity);
+
 }

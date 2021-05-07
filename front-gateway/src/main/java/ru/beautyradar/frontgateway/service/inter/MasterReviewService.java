@@ -1,6 +1,5 @@
 package ru.beautyradar.frontgateway.service.inter;
 
-import org.springframework.transaction.annotation.Transactional;
 import ru.beautyradar.frontgateway.dto.MasterReviewDto;
 import ru.beautyradar.frontgateway.dto.wrap.Resp;
 

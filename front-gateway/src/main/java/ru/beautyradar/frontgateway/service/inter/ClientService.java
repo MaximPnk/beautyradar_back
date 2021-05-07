@@ -1,7 +1,6 @@
 package ru.beautyradar.frontgateway.service.inter;
 
 
-import org.springframework.context.event.EventListener;
 import ru.beautyradar.frontgateway.dto.wrap.Resp;
 import ru.beautyradar.frontgateway.entity.ClientEntity;
 import ru.beautyradar.frontgateway.entity.UserEntity;
@@ -18,7 +17,6 @@ public interface ClientService {
 
     void saveClient(SaveClientEvent event);
 
-    @EventListener
     void updateRating(UpdateClientRatingEvent event);
 
     ClientEntity getClientEntityById(Long id);

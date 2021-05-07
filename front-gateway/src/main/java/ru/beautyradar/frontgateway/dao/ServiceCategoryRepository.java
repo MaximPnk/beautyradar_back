@@ -6,7 +6,6 @@ import ru.beautyradar.frontgateway.entity.MasterCategoryEntity;
 import ru.beautyradar.frontgateway.entity.ServiceCategoryEntity;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface ServiceCategoryRepository extends JpaRepository<ServiceCategoryEntity, Long> {

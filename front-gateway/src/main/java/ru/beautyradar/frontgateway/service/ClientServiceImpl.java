@@ -18,7 +18,6 @@ import ru.beautyradar.frontgateway.map.ClientMapper;
 import ru.beautyradar.frontgateway.service.inter.ClientService;
 import ru.beautyradar.frontgateway.service.inter.UserService;
 
-import java.util.Optional;
 import java.util.OptionalDouble;
 
 @Service
