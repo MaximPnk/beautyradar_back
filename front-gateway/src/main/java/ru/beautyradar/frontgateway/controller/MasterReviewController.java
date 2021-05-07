@@ -42,6 +42,13 @@ public class MasterReviewController {
         return ResponseEntity.ok(masterReviewService.getMasterReviewDtoById(masterReviewId));
     }
 
+    @ApiOperation(value = "Get master review by master id and client id", httpMethod = "GET", notes = "Получение конкретного отзыва мастера", response = MasterReviewResponse.class)
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
+    @GetMapping("/{masterId}/{clientId}")
+    public ResponseEntity<?> getClientReviewByClientIdAndMasterId(@PathVariable("masterId") Long masterId, @PathVariable("clientId") Long clientId) {
+        return ResponseEntity.ok(masterReviewService.getMasterReviewDtoByMasterIdAndClientId(clientId, masterId));
+    }
+
     @ApiOperation(value = "Create master review", httpMethod = "POST", notes = "Создание отзыва мастера", response = MasterReviewResponse.class)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
     @PostMapping("/")

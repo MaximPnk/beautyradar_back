@@ -16,4 +16,6 @@ public interface ClientReviewService {
     Resp<?> updateClientReview(Long id, ClientReviewDto clientReviewDto);
 
     Resp<?> deleteClientReviewById(Long id);
+
+    Resp<?> getClientReviewDtoByClientIdAndMasterId(Long clientId, Long masterId);
 }

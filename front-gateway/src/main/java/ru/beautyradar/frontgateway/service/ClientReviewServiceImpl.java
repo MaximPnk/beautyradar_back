@@ -12,7 +12,6 @@ import ru.beautyradar.frontgateway.dto.wrap.RespBuilder;
 import ru.beautyradar.frontgateway.entity.ClientEntity;
 import ru.beautyradar.frontgateway.entity.ClientReviewEntity;
 import ru.beautyradar.frontgateway.entity.MasterEntity;
-import ru.beautyradar.frontgateway.event.SaveClientEvent;
 import ru.beautyradar.frontgateway.event.UpdateMasterRatingEvent;
 import ru.beautyradar.frontgateway.exc.ResourceNotFoundException;
 import ru.beautyradar.frontgateway.map.ClientReviewMapper;
@@ -73,6 +72,20 @@ public class ClientReviewServiceImpl implements ClientReviewService {
 
     @Override
     @Transactional
+    public Resp<?> getClientReviewDtoByClientIdAndMasterId(Long clientId, Long masterId) {
+        try {
+            ClientEntity client = clientService.getClientEntityById(clientId);
+            MasterEntity master = masterService.getMasterEntityById(masterId);
+            ClientReviewEntity clientReviewEntity = getClientReviewEntityByClientAndMaster(client, master);
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(clientReviewEntity)).build();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
+        }
+    }
+
+    @Override
+    @Transactional
     public Resp<?> createClientReview(ClientReviewDto clientReviewDto) {
         try {
             ClientReviewEntity clientReviewEntity = mapper.mapDtoToEntity(clientReviewDto);
@@ -119,6 +132,10 @@ public class ClientReviewServiceImpl implements ClientReviewService {
 
     public ClientReviewEntity getClientReviewEntityById(Long id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Отзыв клиента с таким id не существует"));
+    }
+
+    public ClientReviewEntity getClientReviewEntityByClientAndMaster(ClientEntity clientEntity, MasterEntity masterEntity) {
+        return repository.findFirstByClientAndMaster(clientEntity, masterEntity).orElseThrow(() -> new ResourceNotFoundException("Отзыв клиента с таким id не существует"));
     }
 
 }

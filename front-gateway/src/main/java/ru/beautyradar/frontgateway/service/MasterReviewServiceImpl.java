@@ -10,14 +10,13 @@ import ru.beautyradar.frontgateway.dto.MasterReviewDto;
 import ru.beautyradar.frontgateway.dto.wrap.Resp;
 import ru.beautyradar.frontgateway.dto.wrap.RespBuilder;
 import ru.beautyradar.frontgateway.entity.ClientEntity;
-import ru.beautyradar.frontgateway.entity.MasterReviewEntity;
 import ru.beautyradar.frontgateway.entity.MasterEntity;
+import ru.beautyradar.frontgateway.entity.MasterReviewEntity;
 import ru.beautyradar.frontgateway.event.UpdateClientRatingEvent;
-import ru.beautyradar.frontgateway.event.UpdateMasterRatingEvent;
 import ru.beautyradar.frontgateway.exc.ResourceNotFoundException;
 import ru.beautyradar.frontgateway.map.MasterReviewMapper;
-import ru.beautyradar.frontgateway.service.inter.MasterReviewService;
 import ru.beautyradar.frontgateway.service.inter.ClientService;
+import ru.beautyradar.frontgateway.service.inter.MasterReviewService;
 import ru.beautyradar.frontgateway.service.inter.MasterService;
 
 import java.util.List;
@@ -73,6 +72,20 @@ public class MasterReviewServiceImpl implements MasterReviewService {
 
     @Override
     @Transactional
+    public Resp<?> getMasterReviewDtoByMasterIdAndClientId(Long masterId, Long clientId) {
+        try {
+            MasterEntity master = masterService.getMasterEntityById(masterId);
+            ClientEntity client = clientService.getClientEntityById(clientId);
+            MasterReviewEntity masterReviewEntity = getMasterReviewEntityByClientAndMaster(master, client);
+            return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(masterReviewEntity)).build();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new RespBuilder<>().setCode(1).setMessage(e.getMessage()).build();
+        }
+    }
+
+    @Override
+    @Transactional
     public Resp<?> createMasterReview(MasterReviewDto masterReviewDto) {
         try {
             MasterReviewEntity masterReviewEntity = mapper.mapDtoToEntity(masterReviewDto);
@@ -118,7 +131,11 @@ public class MasterReviewServiceImpl implements MasterReviewService {
     //service methods
     
     public MasterReviewEntity getMasterReviewEntityById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Отзыв клиента с таким id не существует"));
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Отзыв мастера с таким id не существует"));
+    }
+
+    public MasterReviewEntity getMasterReviewEntityByClientAndMaster(MasterEntity masterEntity, ClientEntity clientEntity) {
+        return repository.findFirstByMasterAndClient(masterEntity, clientEntity).orElseThrow(() -> new ResourceNotFoundException("Отзыв мастера с таким id не существует"));
     }
     
 }
