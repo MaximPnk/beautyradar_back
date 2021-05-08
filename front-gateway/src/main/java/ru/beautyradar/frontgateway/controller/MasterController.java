@@ -21,6 +21,8 @@ public class MasterController {
 
     private final MasterService masterService;
 
+    //todo список мастеров отсортированный по дальности/рейтингу с фильтром по цене
+
     @ApiOperation(value = "Get master list", httpMethod = "GET", notes = "Получить список мастеров", response = MasterListResponse.class)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
     @GetMapping("/")

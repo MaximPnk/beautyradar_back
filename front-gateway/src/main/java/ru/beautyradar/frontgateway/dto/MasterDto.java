@@ -11,6 +11,7 @@ public class MasterDto {
     private Long id;
     private Long userId;
     private String address;
+    private Double latitude;
+    private Double longitude;
     private Double rating;
-    private String coordinates;
 }

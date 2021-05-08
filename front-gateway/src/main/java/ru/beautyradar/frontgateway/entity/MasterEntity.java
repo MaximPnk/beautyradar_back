@@ -17,6 +17,8 @@ import java.util.List;
 @AllArgsConstructor
 public class MasterEntity {
 
+    //todo вынести адрес в отдельный класс
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "master_id")
@@ -29,8 +31,11 @@ public class MasterEntity {
     @Column(name = "address")
     private String address;
 
-    @Column(name="coordinates")
-    private String coordinates;
+    @Column(name = "latitude")
+    private Double latitude;
+
+    @Column(name = "longitude")
+    private Double longitude;
 
     @Column(name = "rating")
     private Double rating;

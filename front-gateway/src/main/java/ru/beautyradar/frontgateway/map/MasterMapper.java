@@ -20,8 +20,9 @@ public class MasterMapper {
         dto.setId(entity.getId());
         dto.setUserId(entity.getUser().getId());
         dto.setAddress(entity.getAddress());
+        dto.setLatitude(entity.getLatitude());
+        dto.setLongitude(entity.getLongitude());
         dto.setRating(entity.getRating());
-        dto.setCoordinates(entity.getCoordinates());
         return dto;
     }
 
@@ -34,7 +35,8 @@ public class MasterMapper {
     public void updateEntityByDto(MasterEntity entity, MasterDto dto) {
         entity.setRating(dto.getRating());
         entity.setAddress(dto.getAddress());
-        entity.setCoordinates(dto.getCoordinates());
+        entity.setLatitude(dto.getLatitude());
+        entity.setLongitude(dto.getLongitude());
         entity.setUser(userService.getUserEntityById(dto.getUserId()));
     }
 
