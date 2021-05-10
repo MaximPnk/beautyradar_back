@@ -29,6 +29,7 @@ public class MasterWorkdayServiceImpl implements MasterWorkdayService {
 
     @Override
     @Transactional
+    //todo по не disabled
     public Resp<?> getAllMasterWorkdaysDtoByMasterId(Long masterId) {
         try {
             MasterEntity master = masterService.getMasterEntityById(masterId);
@@ -45,6 +46,7 @@ public class MasterWorkdayServiceImpl implements MasterWorkdayService {
     @Override
     @Transactional
     public Resp<?> getAllMasterWorkdaysDtoByDate(LocalDate date) {
+        //todo по не disabled
         try {
             List<MasterWorkdayEntity> masterWorkdays = repository.findAllByDate(date);
             return new RespBuilder<>().setCode(0).setBody(masterWorkdays.stream().map(mapper::mapEntityToDto)).build();
@@ -57,6 +59,7 @@ public class MasterWorkdayServiceImpl implements MasterWorkdayService {
     @Override
     @Transactional
     public Resp<?> getMasterWorkdayDtoById(Long id) {
+        //todo по не disabled
         try {
             MasterWorkdayEntity masterWorkdayEntity = getMasterWorkdayEntityById(id);
             return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(masterWorkdayEntity)).build();
@@ -70,6 +73,8 @@ public class MasterWorkdayServiceImpl implements MasterWorkdayService {
     @Transactional
     public Resp<?> createMasterWorkday(MasterWorkdayDto masterWorkdayDto) {
         //todo согласовать логику создания согласно заранее обговорённому бизнес-процессу
+
+        //todo создаём в любом случае новый
         try {
             MasterWorkdayEntity masterWorkdayEntity = mapper.mapDtoToEntity(masterWorkdayDto);
             repository.save(masterWorkdayEntity);
@@ -83,6 +88,8 @@ public class MasterWorkdayServiceImpl implements MasterWorkdayService {
     @Override
     @Transactional
     public Resp<?> updateMasterWorkday(Long id, MasterWorkdayDto masterWorkdayDto) {
+
+        //todo чекаем на disabled, выкидываем ошибку
         try {
             MasterWorkdayEntity masterWorkdayEntity = getMasterWorkdayEntityById(id);
             mapper.updateEntityByDto(masterWorkdayEntity, masterWorkdayDto);
@@ -96,6 +103,8 @@ public class MasterWorkdayServiceImpl implements MasterWorkdayService {
     @Override
     @Transactional
     public Resp<?> deleteMasterWorkdayById(Long id) {
+        //todo ставим disabled, job переводим в статус "отменено мастером"
+        //todo добавляем в push таблицу для каждой job уведомление с текстом
         try {
             repository.deleteById(id);
             return new RespBuilder<>().setCode(0).build();

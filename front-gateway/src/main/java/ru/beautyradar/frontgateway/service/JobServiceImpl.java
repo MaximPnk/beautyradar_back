@@ -133,6 +133,7 @@ public class JobServiceImpl implements JobService {
     @Override
     @Transactional
     public Resp<?> deleteJobById(Long id) {
+        //todo убрать возможность delete
         try {
             repository.deleteById(id);
             return new RespBuilder<>().setCode(0).build();

@@ -26,6 +26,7 @@ public class JobStatusServiceImpl implements JobStatusService {
     @Override
     @Transactional
     public Resp<?> getAllJobStatusesDto() {
+        //todo чекаем на флаг
         try {
             List<JobStatusEntity> jobStatuses = repository.findAll();
             return new RespBuilder<>().setCode(0).setBody(jobStatuses.stream().map(mapper::mapEntityToDto)).build();
@@ -38,6 +39,7 @@ public class JobStatusServiceImpl implements JobStatusService {
     @Override
     @Transactional
     public Resp<?> getJobStatusDtoById(Long id) {
+        //todo чекаем на флаг
         try {
             JobStatusEntity jobStatusEntity = getJobStatusEntityById(id);
             return new RespBuilder<>().setCode(0).setBody(mapper.mapEntityToDto(jobStatusEntity)).build();
@@ -50,6 +52,7 @@ public class JobStatusServiceImpl implements JobStatusService {
     @Override
     @Transactional
     public Resp<?> createJobStatus(JobStatusDto jobStatusDto) {
+        //todo чекаем на поля, если совпадают, то disabled = false
         try {
             JobStatusEntity jobStatusEntity = mapper.mapDtoToEntity(jobStatusDto);
             repository.save(jobStatusEntity);
@@ -63,6 +66,7 @@ public class JobStatusServiceImpl implements JobStatusService {
     @Override
     @Transactional
     public Resp<?> updateJobStatus(Long id, JobStatusDto jobStatusDto) {
+        //todo чекаем на статус, и выдаём ошибку
         try {
             JobStatusEntity jobStatusEntity = getJobStatusEntityById(id);
             mapper.updateEntityByDto(jobStatusEntity, jobStatusDto);
@@ -76,6 +80,7 @@ public class JobStatusServiceImpl implements JobStatusService {
     @Override
     @Transactional
     public Resp<?> deleteJobStatusById(Long id) {
+        //todo ставим флаг disable
         try {
             repository.deleteById(id);
             return new RespBuilder<>().setCode(0).build();

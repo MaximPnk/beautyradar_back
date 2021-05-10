@@ -82,6 +82,12 @@ public class ServiceDescriptionServiceImpl implements ServiceDescriptionService 
     @Override
     @Transactional
     public Resp<?> updateServiceDescription(Long id, ServiceDescriptionDto serviceDescriptionDto) {
+        /**
+         * todo
+         * проверяем на наличие записей
+         * если их нет вообще, то удаляем и создаём копию
+         * если есть записи, то дизейблим и создаём копию
+         */
         try {
             ServiceDescriptionEntity entity = getServiceDescriptionEntityById(id);
             mapper.updateEntityByDto(entity, serviceDescriptionDto);
@@ -95,6 +101,13 @@ public class ServiceDescriptionServiceImpl implements ServiceDescriptionService 
     @Override
     @Transactional
     public Resp<?> deleteServiceDescriptionById(Long id) {
+        /**
+         * todo
+         * проверяем на наличие записей
+         * если их нет вообще, то удаляем
+         * если есть в активном статусе (в будущем времени), запрещаем
+         * в остальных случаях просто ставим disabled
+         */
         try {
             repository.deleteById(id);
             return new RespBuilder<>().setCode(0).build();
