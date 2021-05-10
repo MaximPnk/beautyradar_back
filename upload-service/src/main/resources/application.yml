@@ -17,3 +17,12 @@ spring:
 
 bucket:
   name: ${secret.bucket.name}
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://109.248.203.238:9001/eureka/
+  instance:
+    prefer-ip-address: true

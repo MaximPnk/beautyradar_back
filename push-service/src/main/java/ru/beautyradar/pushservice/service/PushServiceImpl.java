@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.beautyradar.pushservice.dto.wrap.Resp;
+import ru.beautyradar.pushservice.dto.wrap.RespBuilder;
 import ru.beautyradar.pushservice.model.PrivatePush;
 import ru.beautyradar.pushservice.service.inter.PushService;
 import ru.beautyradar.pushservice.service.inter.UserService;

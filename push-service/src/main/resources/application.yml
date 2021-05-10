@@ -14,3 +14,12 @@ spring:
     show-sql: false
   application:
     name: push-service
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://109.248.203.238:9001/eureka/
+  instance:
+    prefer-ip-address: true
