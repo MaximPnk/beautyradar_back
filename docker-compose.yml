@@ -2,7 +2,7 @@ version: '2'
 services:
   eureka-server:
     ports:
-    - "9001:9001"
+    - "8761:8761"
     build: eureka-server/.
 
   front-gateway:
