@@ -4,6 +4,9 @@ server:
   port: 9999
 
 spring:
+  cloud:
+    discovery:
+      enabled: true
   datasource:
     driver-class-name: org.postgresql.Driver
     url: ${pg.url}
@@ -20,6 +23,6 @@ eureka:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://109.248.203.238:9001/eureka/
+      defaultZone: ${EUREKA_URI:http://109.248.203.238:8761/eureka}
   instance:
     prefer-ip-address: true

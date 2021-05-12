@@ -3,6 +3,8 @@ services:
   eureka-server:
     ports:
     - "9001:9001"
+    build: eureka-server/.
+
   front-gateway:
     depends_on:
       - eureka-server
