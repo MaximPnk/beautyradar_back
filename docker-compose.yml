@@ -14,7 +14,7 @@ services:
     links:
       - eureka-server
     environment:
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:9001/eureka
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
 
 
   push-service:
@@ -24,7 +24,7 @@ services:
     links:
       - eureka-server
     environment:
-        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:9001/eureka
+        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
     depends_on:
       - eureka-server
 
@@ -38,4 +38,4 @@ services:
     links:
       - eureka-server
     environment:
-        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:9001/eureka
+        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
