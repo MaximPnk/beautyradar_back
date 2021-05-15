@@ -1,17 +1,18 @@
-package ru.beautyradar.pushservice;
+package ru.beautyradar.eurekaserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
-@EnableEurekaClient
-@PropertySource(value = "classpath:push-service-secret.properties")
-public class PushServiceApplication {
+@EnableEurekaServer
+@PropertySource(value = "classpath:eureka-server.properties")
+public class EurekaServerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(PushServiceApplication.class, args);
+        SpringApplication.run(EurekaServerApplication.class, args);
     }
 
 }

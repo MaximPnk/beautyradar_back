@@ -14,3 +14,15 @@ spring:
     show-sql: false
   application:
     name: push-service
+  cloud:
+    discovery:
+      enabled: true
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://${host}:${eureka.port}/eureka/
+  instance:
+    prefer-ip-address: true

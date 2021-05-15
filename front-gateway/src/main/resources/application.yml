@@ -4,6 +4,9 @@ server:
   port: 9999
 
 spring:
+  cloud:
+    discovery:
+      enabled: true
   datasource:
     driver-class-name: org.postgresql.Driver
     url: ${pg.url}
@@ -14,3 +17,12 @@ spring:
     show-sql: false
   application:
     name: front-gateway
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://${host}:${eureka.port}/eureka/
+  instance:
+    prefer-ip-address: true

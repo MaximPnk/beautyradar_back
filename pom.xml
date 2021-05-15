@@ -17,6 +17,7 @@
     <description>Beauty Radar backend</description>
 
     <modules>
+        <module>eureka-server</module>
         <module>front-gateway</module>
         <module>push-service</module>
         <module>upload-service</module>

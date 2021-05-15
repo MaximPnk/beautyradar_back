@@ -1,14 +1,41 @@
 version: '2'
 services:
+  eureka-server:
+    ports:
+    - "9001:9001"
+    build: eureka-server/.
+
   front-gateway:
+    depends_on:
+      - eureka-server
     build: front-gateway/.
     ports:
       - "9999:9999"
+    links:
+      - eureka-server
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:9001/eureka
+
+
   push-service:
     build: push-service/.
     ports:
       - "9991:9991"
+    links:
+      - eureka-server
+    environment:
+        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:9001/eureka
+    depends_on:
+      - eureka-server
+
+
   upload-service:
     build: upload-service/.
+    depends_on:
+      - eureka-server
     ports:
       - "9995:9995"
+    links:
+      - eureka-server
+    environment:
+        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:9001/eureka

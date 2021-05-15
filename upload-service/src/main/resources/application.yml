@@ -14,6 +14,18 @@ spring:
     show-sql: false
   application:
     name: upload-service
+  cloud:
+    discovery:
+      enabled: true
 
 bucket:
   name: ${secret.bucket.name}
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://${host}:${eureka.port}/eureka/
+  instance:
+    prefer-ip-address: true
