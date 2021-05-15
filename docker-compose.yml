@@ -61,11 +61,7 @@ services:
   api-gateway:
     build: api-gateway/.
     depends_on:
-      front-gateway:
-        condition: service_healthy
-      upload-service:
-        condition: service_healthy
-      push-service:
+      eureka-server:
         condition: service_healthy
     ports:
       - "9100:9100"
