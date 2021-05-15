@@ -1,32 +1,30 @@
 version: '2'
 services:
-  api-gateway:
-    depends_on:
-      - eureka-server
-    build: api-gateway/.
-    ports:
-      - "9100:9100"
-    links:
-      - eureka-server
-    environment:
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:9001/eureka
-
 
   eureka-server:
     ports:
     - "9001:9001"
     build: eureka-server/.
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9001" ]
+      interval: 10s
+      timeout: 10s
+      retries: 20
 
   front-gateway:
-    depends_on:
-      - eureka-server
     build: front-gateway/.
     ports:
       - "9999:9999"
     links:
       - eureka-server
-    environment:
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:9001/eureka
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9999" ]
+      interval: 10s
+      timeout: 10s
+      retries: 20
+    depends_on:
+      eureka-server:
+        condition: service_healthy
 
 
   push-service:
@@ -35,19 +33,41 @@ services:
       - "9991:9991"
     links:
       - eureka-server
-    environment:
-        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:9001/eureka
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9991" ]
+      interval: 10s
+      timeout: 10s
+      retries: 20
     depends_on:
-      - eureka-server
+      eureka-server:
+        condition: service_healthy
 
 
   upload-service:
     build: upload-service/.
-    depends_on:
-      - eureka-server
     ports:
       - "9995:9995"
     links:
       - eureka-server
-    environment:
-        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:9001/eureka
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9995" ]
+      interval: 10s
+      timeout: 10s
+      retries: 20
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+
+  api-gateway:
+    build: api-gateway/.
+    depends_on:
+      front-gateway:
+        condition: service_healthy
+      upload-service:
+        condition: service_healthy
+      push-service:
+        condition: service_healthy
+    ports:
+      - "9100:9100"
+    links:
+      - eureka-server
