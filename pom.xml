@@ -21,6 +21,7 @@
         <module>front-gateway</module>
         <module>push-service</module>
         <module>upload-service</module>
+        <module>api-gateway</module>
     </modules>
 
     <properties>

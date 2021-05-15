@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: api-gatewey
+  cloud:
+    discovery:
+      enabled: true
+    gateway:
+      metrics:
+        enabled: true
+      discovery:
+        locator:
+          enabled: true
+
+      routes:
+        - id: front-gateway
+          uri: lb://FRONT-GATEWAY
+          predicates:
+            - Path=/front-gateway/**
+        - id: push-service
+          uri: lb://PUSH-SERVICE
+          predicates:
+            - Path=/push-service/**
+        - id: upload-service
+          uri: lb://UPLOAD-SERVICE
+          predicates:
+            - Path=/upload-service/**
+    loadbalancer:
+      ribbon:
+        enabled: false
+
+server:
+  port: 9100
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://${host}:${eureka.port}/eureka/
+  instance:
+    prefer-ip-address: true
+

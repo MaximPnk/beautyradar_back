@@ -1,5 +1,17 @@
 version: '2'
 services:
+  api-gateway:
+    depends_on:
+      - eureka-server
+    build: api-gateway/.
+    ports:
+      - "9100:9100"
+    links:
+      - eureka-server
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:9001/eureka
+
+
   eureka-server:
     ports:
     - "9001:9001"
