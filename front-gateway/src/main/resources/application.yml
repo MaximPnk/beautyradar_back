@@ -19,10 +19,10 @@ spring:
     name: front-gateway
 
 eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://${host}:${eureka.port}/eureka/
   instance:
     prefer-ip-address: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://${host}:${eureka.port}/eureka/
