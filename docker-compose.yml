@@ -5,6 +5,7 @@ services:
     ports:
       - "9001:9001"
     build: eureka-server/.
+    restart: on-failure
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:9001" ]
       interval: 10s
@@ -13,40 +14,65 @@ services:
 
   front-gateway:
     build: front-gateway/.
+    restart: on-failure
     ports:
       - "9999:9999"
     links:
       - eureka-server
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9999" ]
+      interval: 10s
+      timeout: 30s
+      retries: 10
     depends_on:
       eureka-server:
         condition: service_healthy
 
   push-service:
     build: push-service/.
+    restart: on-failure
     ports:
       - "9991:9991"
     links:
       - eureka-server
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9991" ]
+      interval: 10s
+      timeout: 30s
+      retries: 10
     depends_on:
       eureka-server:
         condition: service_healthy
 
   upload-service:
     build: upload-service/.
+    restart: on-failure
     ports:
       - "9995:9995"
     links:
       - eureka-server
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9995" ]
+      interval: 10s
+      timeout: 30s
+      retries: 10
     depends_on:
       eureka-server:
         condition: service_healthy
 
   api-gateway:
     build: api-gateway/.
+    restart: on-failure
     ports:
       - "9100:9100"
     links:
       - eureka-server
     depends_on:
       eureka-server:
+        condition: service_healthy
+      front-gateway:
+        condition: service_healthy
+      push-service:
+        condition: service_healthy
+      upload-service:
         condition: service_healthy
