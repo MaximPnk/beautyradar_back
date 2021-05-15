@@ -17,15 +17,9 @@ services:
       - "9999:9999"
     links:
       - eureka-server
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:9999" ]
-      interval: 10s
-      timeout: 30s
-      retries: 10
     depends_on:
       eureka-server:
         condition: service_healthy
-
 
   push-service:
     build: push-service/.
@@ -33,15 +27,9 @@ services:
       - "9991:9991"
     links:
       - eureka-server
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:9991" ]
-      interval: 10s
-      timeout: 30s
-      retries: 10
     depends_on:
       eureka-server:
         condition: service_healthy
-
 
   upload-service:
     build: upload-service/.
@@ -49,11 +37,6 @@ services:
       - "9995:9995"
     links:
       - eureka-server
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:9995" ]
-      interval: 10s
-      timeout: 30s
-      retries: 10
     depends_on:
       eureka-server:
         condition: service_healthy
