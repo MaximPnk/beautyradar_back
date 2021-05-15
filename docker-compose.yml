@@ -3,7 +3,7 @@ services:
 
   eureka-server:
     ports:
-    - "9001:9001"
+      - "9001:9001"
     build: eureka-server/.
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:9001" ]
@@ -60,10 +60,10 @@ services:
 
   api-gateway:
     build: api-gateway/.
-    depends_on:
-      eureka-server:
-        condition: service_healthy
     ports:
       - "9100:9100"
     links:
       - eureka-server
+    depends_on:
+      eureka-server:
+        condition: service_healthy

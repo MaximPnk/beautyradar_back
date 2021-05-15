@@ -1,5 +1,4 @@
 FROM openjdk:8-jre-alpine
-FROM rabbitmq:3-management
 RUN apt-get update
 RUN apt-get install -y curl
 WORKDIR /eureka-server
