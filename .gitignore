@@ -31,6 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+/api-gateway/src/main/resources/api-gateway-secret.properties
 /front-gateway/src/main/resources/front-gateway-secret.properties
 /push-service/src/main/resources/firebase-service-account.json
 /push-service/src/main/resources/push-service-secret.properties
