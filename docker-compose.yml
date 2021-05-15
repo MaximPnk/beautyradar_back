@@ -20,7 +20,7 @@ services:
     links:
       - eureka-server
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:9999" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:9999/front-gateway/" ]
       interval: 10s
       timeout: 30s
       retries: 10
@@ -36,7 +36,7 @@ services:
     links:
       - eureka-server
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:9991" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:9991/push-service/" ]
       interval: 10s
       timeout: 30s
       retries: 10
@@ -52,7 +52,7 @@ services:
     links:
       - eureka-server
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:9995" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:9995/upload-service/" ]
       interval: 10s
       timeout: 30s
       retries: 10

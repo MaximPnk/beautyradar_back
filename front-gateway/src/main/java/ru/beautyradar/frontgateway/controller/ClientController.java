@@ -4,8 +4,12 @@ import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import ru.beautyradar.frontgateway.dto.wrap.swagger.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import ru.beautyradar.frontgateway.dto.wrap.swagger.ClientListResponse;
+import ru.beautyradar.frontgateway.dto.wrap.swagger.ClientResponse;
 import ru.beautyradar.frontgateway.service.inter.ClientService;
 
 @Api(value = "ClientController", tags = {"Client"})
