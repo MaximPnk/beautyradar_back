@@ -1,4 +1,4 @@
-version: '3'
+version: '2.1'
 services:
 
   eureka-server:
@@ -8,8 +8,8 @@ services:
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:9001" ]
       interval: 10s
-      timeout: 10s
-      retries: 20
+      timeout: 30s
+      retries: 10
 
   front-gateway:
     build: front-gateway/.
@@ -20,8 +20,8 @@ services:
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:9999" ]
       interval: 10s
-      timeout: 10s
-      retries: 20
+      timeout: 30s
+      retries: 10
     depends_on:
       eureka-server:
         condition: service_healthy
@@ -36,8 +36,8 @@ services:
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:9991" ]
       interval: 10s
-      timeout: 10s
-      retries: 20
+      timeout: 30s
+      retries: 10
     depends_on:
       eureka-server:
         condition: service_healthy
@@ -52,8 +52,8 @@ services:
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:9995" ]
       interval: 10s
-      timeout: 10s
-      retries: 20
+      timeout: 30s
+      retries: 10
     depends_on:
       eureka-server:
         condition: service_healthy
