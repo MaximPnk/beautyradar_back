@@ -2,7 +2,7 @@ version: '2'
 services:
   eureka-server:
     ports:
-    - "8761:8761"
+    - "9001:9001"
     build: eureka-server/.
 
   front-gateway:
@@ -14,7 +14,7 @@ services:
     links:
       - eureka-server
     environment:
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:9001/eureka
 
 
   push-service:
@@ -24,7 +24,7 @@ services:
     links:
       - eureka-server
     environment:
-        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:9001/eureka
     depends_on:
       - eureka-server
 
@@ -38,4 +38,4 @@ services:
     links:
       - eureka-server
     environment:
-        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:9001/eureka

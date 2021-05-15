@@ -1,5 +1,6 @@
 package ru.beautyradar.pushservice.service;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,8 @@ public class PushServiceImpl implements PushService {
     public Resp<?> send(PrivatePush privatePush) {
 
         String token = userService.getTokenById(privatePush.getUserId());
+
+
 
         Notification notification = Notification
                 .builder()

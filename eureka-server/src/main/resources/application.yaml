@@ -6,13 +6,16 @@ spring:
       enabled: true
 
 server:
-  port: 8761
+  port: 9001
 
 eureka:
   client:
     registerWithEureka: false
     fetchRegistry: false
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
   instance:
     prefer-ip-address: true
+    hostname: ${host}
 
 
